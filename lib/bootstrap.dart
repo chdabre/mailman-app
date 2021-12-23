@@ -5,6 +5,7 @@ import 'package:logging/logging.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mailman/application.dart';
 import 'package:mailman/bloc/auth/auth_event.dart';
+import 'package:mailman/bloc/auth/bloc.dart';
 import 'package:mailman/bloc/bloc_delegate.dart';
 import 'package:mailman/bloc/credentials/bloc.dart';
 import 'package:mailman/bloc/user_data/bloc.dart';
@@ -179,9 +180,12 @@ class _ApplicationLauncherState extends State<ApplicationLauncher> with WidgetsB
     await widget.authRepository.init();
 
     widget.authBloc.add(AppStarted());
-    widget.userDataBloc.add(RefreshUserData());
-    widget.addressBloc.add(RefreshAddressList());
-    widget.jobsBloc.add(RefreshJobsList());
+
+    if (widget.authBloc.state is Authenticated) {
+      widget.userDataBloc.add(RefreshUserData());
+      widget.addressBloc.add(RefreshAddressList());
+      widget.jobsBloc.add(RefreshJobsList());
+    }
 
     _logApplicationStarted();
   }
