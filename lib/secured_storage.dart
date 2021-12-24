@@ -11,6 +11,7 @@ const String _storageEnvironmentFlavorKey = 'environment_flavor';
 const String _storageTokenNameKey = 'token';
 const String _storageInitialAppVersionKey = 'initial_app_version';
 const String _storageFirstAppOpenKey = 'first_app_open';
+const String _storageInitialDeviceIdKey = 'initial_device_id';
 
 class SecuredStorage {
   final Logger _log = Logger('SecuredStorage');
@@ -101,6 +102,19 @@ class SecuredStorage {
 
   Future<String?> getInitialAppVersion() async {
     return _getString(_storageInitialAppVersionKey);
+  }
+
+  Future<bool> hasInitialDeviceId() async {
+    String? deviceId = await getInitialDeviceId();
+    return deviceId != null;
+  }
+
+  Future<String?> getInitialDeviceId() async {
+    return _getString(_storageInitialDeviceIdKey);
+  }
+
+  Future<void> persistInitialDeviceId(String deviceId) async {
+    await _setString(_storageInitialDeviceIdKey, deviceId);
   }
 
   Future<void> persistInitialAppVersion(String appVersion) async {

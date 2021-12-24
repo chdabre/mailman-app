@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:http/http.dart';
+import 'package:logging/logging.dart';
 import 'package:mailman/bloc/address/bloc.dart';
 import 'package:mailman/bloc/auth/bloc.dart';
 import 'package:mailman/bloc/jobs/bloc.dart';
+import 'package:mailman/bloc/user_data/bloc.dart';
 import 'package:mailman/routes/onboarding/get_credentials_screen.dart';
 import 'package:mailman/routes/onboarding/get_started_screen.dart';
 import 'package:mailman/routes/onboarding/login_screen.dart';
+import 'package:mailman/routes/onboarding/notifications_screen.dart';
+import 'package:mailman/services/cloud_notification_service.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+
+import '../../repository/user_repository.dart';
 
 final GetIt getIt = GetIt.instance;
 
@@ -54,9 +61,11 @@ class OnboardingFlow extends StatefulWidget {
 }
 
 class _OnboardingFlowState extends State<OnboardingFlow> {
+  final Logger _log = Logger('OnboardingFlow');
   final authBloc = getIt<AuthenticationBloc>();
   late PageController _pageController;
   final List<Widget> _views = [];
+  bool didReturn = false;
 
   Widget? _getInitialScreen() {
     if (authBloc.state is Unauthenticated) {
@@ -67,6 +76,7 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
   }
 
   Widget _buildGetStartedScreen() {
+    _log.info('Push GetStarted Screen');
     return GetStartedScreen(
       onLoginPressed: () => _pushView(_buildLoginSignupScreen(true)),
       onSignUpPressed: () => _pushView(_buildLoginSignupScreen(false)),
@@ -74,6 +84,7 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
   }
 
   Widget _buildLoginSignupScreen(bool willLogin) {
+    _log.info('Push Login/Signup Screen');
     return LoginSignupScreen(
       willLogin: willLogin,
       onAuthCompleted: _authCompleted,
@@ -81,15 +92,54 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
   }
 
   void _authCompleted() {
+    _log.info('Authentication completed.');
+    getIt<UserDataBloc>().add(RefreshUserData());
     getIt<AddressBloc>().add(RefreshAddressList());
     getIt<JobsBloc>().add(RefreshJobsList());
+
     _pushView(_buildGetCredentialsScreen());
   }
 
   Widget _buildGetCredentialsScreen() {
+    _log.info('Push Credentials Screen');
     return GetCredentialsScreen(
-        onCredentialsReceived: () => Navigator.pop(context)
+        onCredentialsReceived: _credentialsReceived,
     );
+  }
+
+  void _credentialsReceived() async {
+    _log.info('Credentials received.');
+
+    var notificationService = CloudNotificationService.instance;
+    if (await notificationService.hasNotificationPermissions()) {
+      _pushNotificationsConfigured();
+    } else {
+      _pushView(_buildNotificationsScreen());
+    }
+  }
+
+  Widget _buildNotificationsScreen() {
+    _log.info('Push Notification Permissions Screen');
+    return PushNotificationsScreen(
+        onCompleted: _pushNotificationsConfigured,
+    );
+  }
+
+  void _pushNotificationsConfigured() {
+    _log.info('Push Notifications configured.');
+    var userRepository = getIt<UserRepository>();
+    userRepository.registerFCMId();
+
+    _completeFlow();
+  }
+
+  void _completeFlow() {
+    _log.info('All actions complete. Closing modal.');
+    if (!didReturn) {
+      // Ensure the screen does not pop twice.
+      didReturn = true;
+      Navigator.pop(context);
+    }
   }
 
   void _pushView(Widget view) {

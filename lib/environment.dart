@@ -7,7 +7,7 @@ const String custom = 'custom';
 
 final Map<String, String> flavors = {
   production: 'https://mailman.imakethings.ch',
-  development: 'http://192.168.86.35:1337',//'https://mailman.imakethings.ch', // 'http://172.20.10.5:8000',
+  development: 'http://192.168.86.25:8000',//'https://mailman.imakethings.ch', // 'http://172.20.10.5:8000',
   custom: '',
 };
 

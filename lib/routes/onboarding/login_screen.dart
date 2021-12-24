@@ -97,7 +97,6 @@ class UsernamePasswordForm extends StatefulWidget {
 
 class _UsernamePasswordFormState extends State<UsernamePasswordForm> {
   final _authBloc = getIt<AuthenticationBloc>();
-  final _userDataBloc = getIt<UserDataBloc>();
 
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _usernameController;
@@ -126,7 +125,6 @@ class _UsernamePasswordFormState extends State<UsernamePasswordForm> {
 
   void _authListener(BuildContext context, AuthenticationState state) {
     if (state is Authenticated) {
-      _userDataBloc.add(RefreshUserData());
       widget.onAuthCompleted?.call();
     }
 

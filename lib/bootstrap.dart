@@ -1,4 +1,6 @@
 import 'package:bloc/bloc.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
@@ -9,6 +11,7 @@ import 'package:mailman/bloc/auth/bloc.dart';
 import 'package:mailman/bloc/bloc_delegate.dart';
 import 'package:mailman/bloc/credentials/bloc.dart';
 import 'package:mailman/bloc/user_data/bloc.dart';
+import 'package:mailman/platform/platform_utils.dart';
 import 'package:mailman/repository/address_repository.dart';
 import 'package:mailman/repository/auth_repository.dart';
 import 'package:mailman/repository/credentials_repository.dart';
@@ -21,6 +24,7 @@ import 'package:mailman/repository/rest/jobs_repository.dart';
 import 'package:mailman/repository/rest/user_repository.dart';
 import 'package:mailman/repository/user_repository.dart';
 import 'package:mailman/secured_storage.dart';
+import 'package:mailman/services/cloud_notification_service.dart';
 
 import 'bloc/address/bloc.dart';
 import 'bloc/auth/auth_bloc.dart';
@@ -76,10 +80,11 @@ Future<void> startApplication(Environment environment) async {
   var addressBloc = AddressBloc(addressRepository);
   var jobsBloc = JobsBloc(jobsRepository);
 
-  // TODO Prefs Bloc
-  // var sharedPreferences = await SharedPreferences.getInstance();
-  // var preferencesBloc = PreferencesBloc(sharedPreferences: sharedPreferences);
-
+  var hasInitialDeviceId = await securedStorage.hasInitialDeviceId();
+  if (!hasInitialDeviceId) {
+    var deviceId = await PlatformUtils.getID;
+    securedStorage.persistInitialDeviceId(deviceId);
+  }
 
   var appLauncher = ApplicationLauncher(
       application: const MailmanApplication(),
@@ -181,11 +186,9 @@ class _ApplicationLauncherState extends State<ApplicationLauncher> with WidgetsB
 
     widget.authBloc.add(AppStarted());
 
-    if (widget.authBloc.state is Authenticated) {
-      widget.userDataBloc.add(RefreshUserData());
-      widget.addressBloc.add(RefreshAddressList());
-      widget.jobsBloc.add(RefreshJobsList());
-    }
+    final notificationService = CloudNotificationService.instance;
+    await notificationService.init();
+    await widget.userRepository.registerFCMId();
 
     _logApplicationStarted();
   }

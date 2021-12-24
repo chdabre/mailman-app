@@ -55,6 +55,10 @@ dependencies:
   intl: ^0.17.0
   pull_to_refresh: ^2.0.0
   cached_network_image: ^2.5.1
+  firebase_messaging: ^11.2.4
+  firebase_core: ^1.10.6
+  firebase_analytics: ^9.0.4
+
 
 dev_dependencies:
   flutter_test:

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
-import 'package:mailman/bloc/auth/bloc.dart';
 import 'package:mailman/bloc/jobs/bloc.dart';
 import 'package:mailman/components/app_bar.dart';
 import 'package:mailman/components/postcard_preview.dart';
@@ -11,6 +10,8 @@ import 'package:mailman/routes/create_postcard/create_postcard.dart';
 import 'package:mailman/routes/home/postcard_quick_actions_modal.dart';
 import 'package:mailman/routes/onboarding/sign_up_modal.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+
+import '../../bloc/auth/bloc.dart';
 
 final GetIt getIt = GetIt.instance;
 

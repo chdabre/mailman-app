@@ -7,5 +7,7 @@ abstract class UserRepository {
   Future<User?> getUser();
 
   Future<User?> updateUser(UserEntity userEntity);
+
+  Future<void> registerFCMId();
 }
 
