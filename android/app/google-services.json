@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "951777836444",
+    "project_id": "mailman-postcards",
+    "storage_bucket": "mailman-postcards.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:951777836444:android:19dd57abf6809529259c59",
+        "android_client_info": {
+          "package_name": "ch.imakethings.mailman"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "951777836444-b5qkn0of7pngdl96ia7v0buta2eladum.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ch.imakethings.mailman",
+            "certificate_hash": "5bafe10bd1b8cad1f5a7800b763ebb4e6517721e"
+          }
+        },
+        {
+          "client_id": "951777836444-9mimqfq1io4hpa0bdhcn8th7fnus7qht.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcICN4gEgncpsnTfHKYO5-_vF_E_IhQxs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "951777836444-9mimqfq1io4hpa0bdhcn8th7fnus7qht.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
