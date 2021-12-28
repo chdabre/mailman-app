@@ -45,10 +45,10 @@ class _CreatePostcardRouteState extends State<CreatePostcardRoute> {
   void _pickFrontImage() async {
     _postcardLoading = true;
     setState(() {});
-    var pickedImage = await ImagePicker.pickImage(source: ImageSource.gallery);
-    // ignore: unnecessary_null_comparison
+    final ImagePicker _picker = ImagePicker();
+    var pickedImage = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedImage != null) {
-      bool isLandscape = await ImageUtils.imageIsLandscape(pickedImage);
+      bool isLandscape = await ImageUtils.imageIsLandscape(await pickedImage.readAsBytes());
       double aspectRatio = pow(3 / 2, isLandscape ? 1 : -1).toDouble();
 
       var croppedImage = await ImageCropper.cropImage(
@@ -128,7 +128,7 @@ class _CreatePostcardRouteState extends State<CreatePostcardRoute> {
     try {
       var created = await jobsRepository.create(_postcard);
       Navigator.pop(context, created);
-    } on IOError catch (error) {
+    } on IOError {
       // TODO Error handling
     } finally {
       _loading = false;

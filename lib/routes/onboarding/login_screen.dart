@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mailman/bloc/auth/bloc.dart';
-import 'package:mailman/bloc/user_data/bloc.dart';
 import 'package:mailman/components/alert.dart';
 
 final GetIt getIt = GetIt.instance;
@@ -144,10 +143,11 @@ class _UsernamePasswordFormState extends State<UsernamePasswordForm> {
         r"{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]"
         r"{0,253}[a-zA-Z0-9])?)*$";
     RegExp regex = RegExp(pattern);
-    if (value == null || value.isEmpty || !regex.hasMatch(value))
+    if (value == null || value.isEmpty || !regex.hasMatch(value)) {
       return 'Enter a valid email address';
-    else
+    } else {
       return null;
+    }
   }
 
   @override

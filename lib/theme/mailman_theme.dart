@@ -9,7 +9,7 @@ final mailmanTheme = ThemeData.from(
 final ColorScheme _mailmanColorScheme = ColorScheme.light(
   primary: const Color(0xFFEABA0F),
   background: const Color(0xFFFDFDFD),
-  surface: const Color(0xFF171717),
+  surface: const Color(0xFFFDFDFD),
   error: const Color(0xFFDE440C),
   onPrimary: Colors.black.withOpacity(0.87),
   onBackground: Colors.white.withOpacity(0.87),

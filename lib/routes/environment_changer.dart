@@ -12,6 +12,8 @@ final GetIt getIt = GetIt.instance;
 class EnvironmentChangerRoute extends StatefulWidget {
   static const routeName = '/environment';
 
+  const EnvironmentChangerRoute({Key? key}) : super(key: key);
+
   @override
   _EnvironmentChangerRouteState createState() =>
       _EnvironmentChangerRouteState();
@@ -37,7 +39,7 @@ class _EnvironmentChangerRouteState extends State<EnvironmentChangerRoute> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Environment"),
+        title: const Text("Environment"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -85,7 +87,7 @@ class _EnvironmentChangerRouteState extends State<EnvironmentChangerRoute> {
                           _environment.flavors[custom] = text;
                         },
                         decoration:
-                        InputDecoration(hintText: 'Enter custom URL'),
+                        const InputDecoration(hintText: 'Enter custom URL'),
                       )
                   ],
                 ),
@@ -95,7 +97,7 @@ class _EnvironmentChangerRouteState extends State<EnvironmentChangerRoute> {
               child: Padding(
                 padding: const EdgeInsets.all(30.0),
                 child: ElevatedButton(
-                  child: Text("Save"),
+                  child: const Text("Save"),
                   onPressed: () {
                     if (_selectedFlavor != _environment.flavor) {
                       _log.info('Updating flavor to $_selectedFlavor');

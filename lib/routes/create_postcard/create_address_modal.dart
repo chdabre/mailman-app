@@ -41,7 +41,7 @@ class _CreateAddressModalViewState extends State<CreateAddressModalView> {
   final _formKey = GlobalKey<FormState>();
 
   bool _hasError = false;
-  String? _errorMessage = "";
+  final String? _errorMessage = "";
 
   late TextEditingController _firstNameController;
   late TextEditingController _lastNameController;
@@ -70,7 +70,7 @@ class _CreateAddressModalViewState extends State<CreateAddressModalView> {
       try {
         var created = await addressRepository.create(address);
         Navigator.pop(context, created);
-      } on IOError catch (error, stacktrace) {
+      } on IOError {
         // TODO Error handling
       }
     }

@@ -134,10 +134,21 @@ class _PreferencesViewState extends State<PreferencesView> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: const [
-        PreferencesUserHeader(),
-        Spacer(),
-        PreferencesFooter()
+      children: [
+        const PreferencesUserHeader(),
+        AboutListTile(
+          icon: const Icon(Icons.info),
+          applicationLegalese: "Created by Dario Breitenstein.\nPowered by open source software.\nThis App is in no way affiliated with Post CH AG or Postcard Creator. Use at your own discretion.",
+          applicationIcon: ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: const Image(
+                image: AssetImage("assets/image/app-icon.png"),
+                width: 32,
+            ),
+          ),
+        ),
+        const Spacer(),
+        const PreferencesFooter()
       ],
     );
   }

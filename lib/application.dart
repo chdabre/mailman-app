@@ -46,7 +46,7 @@ class MailmanApplication extends StatelessWidget {
           routes: {
             HomeRoute.routeName: (context) => const HomeRoute(),
             CreatePostcardRoute.routeName: (context) => const CreatePostcardRoute(),
-            EnvironmentChangerRoute.routeName: (context) => EnvironmentChangerRoute()
+            EnvironmentChangerRoute.routeName: (context) => const EnvironmentChangerRoute()
           }
         );
       }

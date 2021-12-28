@@ -49,7 +49,7 @@ class _HomeRouteState extends State<HomeRoute> {
               if (created != null) _jobsBloc.add(RefreshJobsList());
             },
             backgroundColor: Theme.of(context).primaryColor,
-            label: Text("CREATE"),
+            label: const Text("CREATE"),
             icon: const Icon(Icons.add),
           ),
           body: SafeArea(

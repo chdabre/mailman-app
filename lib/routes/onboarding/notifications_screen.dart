@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:mailman/bloc/credentials/bloc.dart';
-import 'package:mailman/repository/credentials_repository.dart';
 import 'package:mailman/services/cloud_notification_service.dart';
-import 'package:mailman/services/postcard_auth_service.dart';
 
 final GetIt getIt = GetIt.instance;
 

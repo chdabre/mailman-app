@@ -30,7 +30,7 @@ class AddressState extends Equatable {
   Address? getPrimaryAddress() {
     try {
       return addressList.firstWhere((address) => address.isPrimary);
-    } on StateError catch (e) {
+    } on StateError {
       return null;
     }
   }

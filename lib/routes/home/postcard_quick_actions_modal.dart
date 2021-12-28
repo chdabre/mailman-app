@@ -48,8 +48,8 @@ class _QuickActionsModalViewState extends State<QuickActionsModalView> {
             const Divider(),
             ListTile(
               onTap: _deletePostcard,
-              leading: Icon(Icons.delete),
-              title: Text("Delete"),
+              leading: const Icon(Icons.delete),
+              title: const Text("Delete"),
             )
           ],
         ),

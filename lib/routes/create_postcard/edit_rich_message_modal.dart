@@ -76,7 +76,7 @@ class RichMessageTextObject extends ChangeNotifier {
   final String text;
   final TextStyle style;
   final ValueNotifier<Matrix4> matrix = ValueNotifier(Matrix4.translationValues(8, 8, 0));
-  final String id = Uuid().v4();
+  final String id = const Uuid().v4();
 
 
   Size? bounds;

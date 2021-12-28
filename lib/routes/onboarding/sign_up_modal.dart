@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:http/http.dart';
 import 'package:logging/logging.dart';
 import 'package:mailman/bloc/address/bloc.dart';
 import 'package:mailman/bloc/auth/bloc.dart';

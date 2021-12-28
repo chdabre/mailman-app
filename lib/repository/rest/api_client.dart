@@ -464,17 +464,17 @@ enum IOErrorType {
 
 IOErrorType _fromDioErrorType(DioErrorType type) {
   switch (type) {
-    case DioErrorType.CONNECT_TIMEOUT:
+    case DioErrorType.connectTimeout:
       return IOErrorType.connectTimeout;
-    case DioErrorType.SEND_TIMEOUT:
+    case DioErrorType.sendTimeout:
       return IOErrorType.sendTimeout;
-    case DioErrorType.RECEIVE_TIMEOUT:
+    case DioErrorType.receiveTimeout:
       return IOErrorType.receiveTimeout;
-    case DioErrorType.RESPONSE:
+    case DioErrorType.response:
       return IOErrorType.response;
-    case DioErrorType.CANCEL:
+    case DioErrorType.cancel:
       return IOErrorType.cancel;
-    case DioErrorType.DEFAULT:
+    case DioErrorType.other:
     default:
       return IOErrorType.other;
   }

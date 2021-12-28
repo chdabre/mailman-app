@@ -1,12 +1,9 @@
 import 'package:bloc/bloc.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mailman/application.dart';
-import 'package:mailman/bloc/auth/auth_event.dart';
 import 'package:mailman/bloc/auth/bloc.dart';
 import 'package:mailman/bloc/bloc_delegate.dart';
 import 'package:mailman/bloc/credentials/bloc.dart';
@@ -27,7 +24,6 @@ import 'package:mailman/secured_storage.dart';
 import 'package:mailman/services/cloud_notification_service.dart';
 
 import 'bloc/address/bloc.dart';
-import 'bloc/auth/auth_bloc.dart';
 import 'bloc/jobs/bloc.dart';
 import 'environment.dart';
 
