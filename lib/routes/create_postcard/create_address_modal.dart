@@ -49,6 +49,8 @@ class _CreateAddressModalViewState extends State<CreateAddressModalView> {
   late TextEditingController _cityController;
   late TextEditingController _postCodeController;
 
+  final FocusScopeNode _scopeNode = FocusScopeNode();
+
   void _addressListener(BuildContext context, AddressState state) {
   }
 
@@ -68,7 +70,7 @@ class _CreateAddressModalViewState extends State<CreateAddressModalView> {
       );
 
       try {
-        var created = await addressRepository.create(address);
+        var created = await addressRepository.create(address: address);
         Navigator.pop(context, created);
       } on IOError {
         // TODO Error handling
@@ -109,85 +111,100 @@ class _CreateAddressModalViewState extends State<CreateAddressModalView> {
                 child: SingleChildScrollView(
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
-                    child: Form(
-                      key: _formKey,
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      onChanged: _formInputChanged,
-                      child: Column(
-                        children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Flexible(
-                                child: TextFormField(
-                                  controller: _firstNameController,
-                                  validator: _fieldValidator,
-                                  autofocus: true,
-                                  decoration: const InputDecoration(
-                                    label: Text("First Name"),
-                                    border: OutlineInputBorder(),
+                    child: FocusScope(
+                      node: _scopeNode,
+                      autofocus: true,
+                      child: Form(
+                        key: _formKey,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        onChanged: _formInputChanged,
+                        child: Column(
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Flexible(
+                                  child: TextFormField(
+                                    controller: _firstNameController,
+                                    validator: _fieldValidator,
+                                    autofocus: true,
+                                    keyboardType: TextInputType.name,
+                                    textInputAction: TextInputAction.next,
+                                    onEditingComplete: _scopeNode.nextFocus,
+                                    decoration: const InputDecoration(
+                                      label: Text("First Name"),
+                                      border: OutlineInputBorder(),
+                                    ),
                                   ),
                                 ),
-                              ),
-                              const SizedBox(width: 8.0,),
-                              Flexible(
-                                child: TextFormField(
-                                  controller: _lastNameController,
-                                  validator: _fieldValidator,
-                                  autofocus: true,
-                                  decoration: const InputDecoration(
-                                    label: Text("Last Name"),
-                                    border: OutlineInputBorder(),
+                                const SizedBox(width: 8.0,),
+                                Flexible(
+                                  child: TextFormField(
+                                    controller: _lastNameController,
+                                    validator: _fieldValidator,
+                                    keyboardType: TextInputType.name,
+                                    textInputAction: TextInputAction.next,
+                                    onEditingComplete: _scopeNode.nextFocus,
+                                    decoration: const InputDecoration(
+                                      label: Text("Last Name"),
+                                      border: OutlineInputBorder(),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 16.0,),
-                          TextFormField(
-                            controller: _streetController,
-                            validator: _fieldValidator,
-                            autofocus: true,
-                            decoration: const InputDecoration(
-                              label: Text("Street, Nr."),
-                              border: OutlineInputBorder(),
+                              ],
                             ),
-                          ),
-                          const SizedBox(height: 16.0,),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                width: 72,
-                                child: TextFormField(
-                                  controller: _postCodeController,
-                                  validator: _fieldValidator,
-                                  autofocus: true,
-                                  decoration: const InputDecoration(
-                                    label: Text("PLZ"),
-                                    border: OutlineInputBorder(),
+                            const SizedBox(height: 16.0,),
+                            TextFormField(
+                              controller: _streetController,
+                              validator: _fieldValidator,
+                              keyboardType: TextInputType.streetAddress,
+                              textInputAction: TextInputAction.next,
+                              onEditingComplete: _scopeNode.nextFocus,
+                              decoration: const InputDecoration(
+                                label: Text("Street, Nr."),
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
+                            const SizedBox(height: 16.0,),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  width: 72,
+                                  child: TextFormField(
+                                    controller: _postCodeController,
+                                    validator: _fieldValidator,
+                                    keyboardType: TextInputType.number,
+                                    textInputAction: TextInputAction.next,
+                                    onEditingComplete: _scopeNode.nextFocus,
+                                    decoration: const InputDecoration(
+                                      label: Text("PLZ"),
+                                      border: OutlineInputBorder(),
+                                    ),
                                   ),
                                 ),
-                              ),
-                              const SizedBox(width: 8.0,),
-                              Flexible(
-                                child: TextFormField(
-                                  controller: _cityController,
-                                  validator: _fieldValidator,
-                                  autofocus: true,
-                                  decoration: const InputDecoration(
-                                    label: Text("City"),
-                                    border: OutlineInputBorder(),
+                                const SizedBox(width: 8.0,),
+                                Flexible(
+                                  child: TextFormField(
+                                    controller: _cityController,
+                                    validator: _fieldValidator,
+                                    keyboardType: TextInputType.streetAddress,
+                                    textInputAction: TextInputAction.done,
+                                    onEditingComplete: _submitButtonPressed,
+                                    decoration: const InputDecoration(
+                                      label: Text("City"),
+                                      border: OutlineInputBorder(),
+                                    ),
                                   ),
                                 ),
-                              ),
+                              ],
+                            ),
+                            const SizedBox(height: 16.0,),
+                            if (_hasError) ...[
+                              Alert(errorMessage: _errorMessage),
                             ],
-                          ),
-                          const SizedBox(height: 16.0,),
-                          if (_hasError) ...[
-                            Alert(errorMessage: _errorMessage),
                           ],
-                        ],
+                        ),
                       ),
                     ),
                   ),

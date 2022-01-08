@@ -58,7 +58,7 @@ class AddressRestRepository extends AddressRepository {
   }
 
   @override
-  Future<Address?> create(Address address) async {
+  Future<Address?> create({ required Address address}) async {
     try {
       var entity = address.toEntity();
       var requestData = entity.toJson();
@@ -77,5 +77,40 @@ class AddressRestRepository extends AddressRepository {
       _log.warning('Failed to create Address', error, stacktrace);
     }
   }
+
+  @override
+  Future<void> delete({ required Address address}) async {
+    try {
+      var entity = address.toEntity();
+      _log.info('Deleting Address with id ${entity.id}');
+
+      var response = await _client.delete('/api/v1/address/${entity.id!}/',);
+
+      _log.info('Deleted Address $response');
+
+    } on IOError catch (error, stacktrace) {
+      _log.warning('Failed to delete Address (${error.code} | ${error.message} | ${error.data})', error, stacktrace);
+    }
+  }
+
+  @override
+  Future<Address?> setPrimary({required Address address}) async {
+    try {
+      var entity = address.toEntity();
+      _log.info('Setting Address ${entity.id} to primary address');
+
+      var response = await _client.post('/api/v1/address/${entity.id}/set_primary/',);
+
+      _log.info('Updated Address $response');
+
+      return Address.fromEntity(
+          AddressEntity.fromJson(response)
+      );
+    } on IOError catch (error, stacktrace) {
+      _log.warning('Failed to update Address', error, stacktrace);
+    }
+  }
+
+
 }
 

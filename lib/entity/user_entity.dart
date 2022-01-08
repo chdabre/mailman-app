@@ -3,7 +3,7 @@ import 'package:meta/meta.dart';
 
 @immutable
 class UserEntity extends Equatable {
-  static const String _fieldId = 'id';
+  static const String _fieldId = 'pk';
   static const String _fieldUsername = 'username';
   static const String _fieldEmail = 'email';
   static const String _fieldFirstName = 'first_name';

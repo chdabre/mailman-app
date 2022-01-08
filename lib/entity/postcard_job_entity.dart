@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:intl/intl.dart';
 import 'package:meta/meta.dart';
 
 import 'address_entity.dart';
@@ -52,8 +53,8 @@ class PostcardJobEntity extends Equatable {
       PostcardJobEntity(
         id: json[_fieldId],
         status: json[_fieldStatus],
-        sendOn: DateTime.parse(json[_fieldSendOn]),
-        timeSent: json[_fieldTimeSent] != null ? DateTime.parse(json[_fieldTimeSent]) : null,
+        sendOn: DateTime.parse(json[_fieldSendOn]).toLocal(),
+        timeSent: json[_fieldTimeSent] != null ? DateTime.parse(json[_fieldTimeSent]).toLocal() : null,
         frontImageUrl: json[_fieldFrontImage],
         messageImageUrl: json[_fieldMessageImage],
         isLandscape: json[_fieldIsLandscape],

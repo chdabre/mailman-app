@@ -5,6 +5,10 @@ abstract class AddressRepository {
 
   Future<Address?> get({ required int id });
 
-  Future<Address?> create(Address address);
+  Future<Address?> setPrimary({ required Address address });
+
+  Future<Address?> create({ required Address address});
+
+  Future<void> delete({ required Address address});
 }
 

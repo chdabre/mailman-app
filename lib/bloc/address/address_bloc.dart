@@ -27,5 +27,43 @@ class AddressBloc extends Bloc<AddressEvent, AddressState> {
         addressList: null,
       ));
     });
+
+    on<DeleteAddress>((event, emit) async {
+      final obj = event.address;
+      var tempList = state.addressList.where((a) => a.id != obj.id).toList();
+
+      AddressState loadingState = state.copyWith(
+        loading: true,
+        addressList: tempList,
+      );
+      emit(loadingState);
+
+      await addressRepository.delete(address: obj);
+      var addressList = await addressRepository.list();
+
+      emit(loadingState.copyWith(
+        loading: false,
+        fetched: true,
+        addressList: addressList,
+      ));
+    });
+
+    on<SetPrimaryAddress>((event, emit) async {
+      final obj = event.address;
+
+      AddressState loadingState = state.copyWith(
+        loading: true,
+      );
+      emit(loadingState);
+
+      await addressRepository.setPrimary(address: obj);
+      var addressList = await addressRepository.list();
+
+      emit(loadingState.copyWith(
+        loading: false,
+        fetched: true,
+        addressList: addressList,
+      ));
+    });
   }
 }

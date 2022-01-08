@@ -51,7 +51,7 @@ class UserRestRepository extends UserRepository {
       var entity = FCMDeviceEntity(
         deviceId: await securedStorage.getInitialDeviceId(),
         registrationId: await notificationService.getRegistrationId(),
-        type: PlatformUtils.isIOS ? 'ios' : PlatformUtils.isAndroid ? 'android' : 'web',
+        type: PlatformUtils.platformName,
       );
       _log.info('Trying to register FCM id $entity');
 

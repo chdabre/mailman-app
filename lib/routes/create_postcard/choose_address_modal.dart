@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get_it/get_it.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:mailman/bloc/address/bloc.dart';
 import 'package:mailman/components/address_preview.dart';
 import 'package:mailman/model/address.dart';
 import 'package:mailman/routes/create_postcard/create_address_modal.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 final GetIt getIt = GetIt.instance;
 
@@ -70,6 +71,14 @@ class _ChooseAddressModalViewState extends State<ChooseAddressModalView> {
     setState(() {});
   }
 
+  void _deleteAddress(Address address) async {
+    _addressBloc.add(DeleteAddress(address: address));
+  }
+
+  void _setPrimaryAddress(Address address) async {
+    _addressBloc.add(SetPrimaryAddress(address: address));
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -79,28 +88,34 @@ class _ChooseAddressModalViewState extends State<ChooseAddressModalView> {
             bloc: _addressBloc,
             listener: _addressListener,
             builder: (context, addressState) {
-              return SingleChildScrollView(
-                child: Column(
-                  children: [
-                    if (addressState.loading) const LinearProgressIndicator(),
-                    for (Address address in addressState.addressList) AddressRadioListTile(
-                        address: address,
-                        selectedAddress: _selectedAddress,
-                        onChanged: _selectAddress,
+              return Expanded(
+                child: SingleChildScrollView(
+                  child: SlidableAutoCloseBehavior(
+                    child: Column(
+                      children: [
+                        if (addressState.loading) const LinearProgressIndicator(),
+                        for (Address address in addressState.addressList) AddressRadioListTile(
+                          key: ValueKey<int>(address.id!),
+                          address: address,
+                          selectedAddress: _selectedAddress,
+                          onChanged: _selectAddress,
+                          onDelete: () => _deleteAddress(address),
+                          onSetPrimary: () => _setPrimaryAddress(address),
+                        ),
+                        const Divider(),
+                        ListTile(
+                          leading: const Icon(Icons.add),
+                          title: const Text("Add new Address"),
+                          onTap: () => _createAddress(context),
+                        ),
+                      ],
                     ),
-                    const Divider(),
-                    ListTile(
-                      leading: const Icon(Icons.add),
-                      title: const Text("Add new Address"),
-                      onTap: () => _createAddress(context),
-                    ),
-                  ],
+                  ),
                 ),
               );
             },
           ),
-          const SizedBox(height: 16,),
-          const Spacer(),
+          const Divider(),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: ElevatedButton(
@@ -120,32 +135,56 @@ class _ChooseAddressModalViewState extends State<ChooseAddressModalView> {
 
 class AddressRadioListTile extends StatelessWidget {
   const AddressRadioListTile({
-    Key? key,
+    required Key key,
     required this.address,
     this.selectedAddress,
     this.onChanged,
+    this.onDelete,
+    this.onSetPrimary,
   }) : super(key: key);
 
   final Address address;
   final Address? selectedAddress;
   final Function(Address? newValue)? onChanged;
+  final void Function()? onDelete;
+  final void Function()? onSetPrimary;
 
   @override
   Widget build(BuildContext context) {
-    return RadioListTile(
-        value: address,
-        groupValue: selectedAddress,
-        onChanged: onChanged,
-        activeColor: Theme.of(context).primaryColor,
-        contentPadding: const EdgeInsets.only(left: 8.0, right: 16.0, top: 8.0, bottom: 8.0),
-        title: Row(
-          children: [
-            AddressPreview(
-              address: address,
-              color: Colors.transparent,
-            ),
-          ],
-        )
+    return Slidable(
+      key: key,
+      groupTag: '0',
+      endActionPane: address.isPrimary ? null : ActionPane(
+        motion: const ScrollMotion(),
+        dismissible: DismissiblePane(onDismissed: () { onDelete?.call(); }),
+        children: [
+          if (!address.isPrimary) SlidableAction(
+            onPressed: (_) { onSetPrimary?.call(); },
+            icon: Icons.home,
+            backgroundColor: Theme.of(context).disabledColor,
+          ),
+          if (!address.isPrimary) SlidableAction(
+            onPressed: (_) { onDelete?.call(); },
+            icon: Icons.delete,
+            backgroundColor: Theme.of(context).colorScheme.error,
+          )
+        ],
+      ),
+      child: RadioListTile(
+          value: address,
+          groupValue: selectedAddress,
+          onChanged: onChanged,
+          activeColor: Theme.of(context).primaryColor,
+          contentPadding: const EdgeInsets.only(left: 8.0, right: 16.0, top: 4.0, bottom: 4.0),
+          title: Row(
+            children: [
+              AddressPreview(
+                address: address,
+                color: Colors.transparent,
+              ),
+            ],
+          )
+      ),
     );
   }
 }

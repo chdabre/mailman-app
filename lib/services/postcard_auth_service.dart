@@ -5,7 +5,7 @@ import 'package:oauth2_client/oauth2_client.dart';
 
 const _postAuthClientId = 'ae9b9894f8728ca78800942cda638155';
 const _postAuthClientSecret = '89ff451ede545c3f408d792e8caaddf0';
-const _postAuthScopes = ['PCCWEB%20offline_access'];
+const _postAuthScopes = ['PCCWEB offline_access'];
 const _postAuthState = 'abcd';
 
 class PostOAuth2Client extends OAuth2Client {
@@ -39,6 +39,9 @@ class PostcardAuthService {
         clientSecret: _postAuthClientSecret,
         scopes: _postAuthScopes,
         state: _postAuthState,
+        webAuthOpts: {
+          "preferEphemeral": false,
+        }
       );
 
       _log.info('Success');

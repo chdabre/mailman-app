@@ -14,6 +14,8 @@ import 'package:mailman/repository/rest/api_client.dart';
 import 'package:mailman/routes/create_postcard/choose_address_modal.dart';
 import 'package:mailman/routes/create_postcard/edit_message_modal.dart';
 
+import 'edit_rich_message_modal.dart';
+
 final GetIt getIt = GetIt.instance;
 
 class CreatePostcardRoute extends StatefulWidget {
@@ -178,7 +180,6 @@ class _CreatePostcardRouteState extends State<CreatePostcardRoute> {
                       )),
                     ),
                     const Divider(height: 1,),
-                    const SizedBox(height: 16,),
                   ],
                 ),
               ),

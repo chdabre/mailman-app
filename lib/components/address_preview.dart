@@ -49,22 +49,29 @@ class AddressPreview extends StatelessWidget {
               child: address != null
                   ? Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Column(
+                child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (!compact && actionLabel.isNotEmpty) ...[
-                      Text(actionLabel.toUpperCase(),
-                          style: Theme.of(context).textTheme.button!.copyWith(
-                            fontSize: 10,
-                          )
-                      ),
-                      const SizedBox(height: 4,),
-                    ],
-                    _buildAddressLine(context,
-                        "${address!.firstName} ${address!.lastName}"),
-                    _buildAddressLine(context, address!.street),
-                    _buildAddressLine(
-                        context, "${address!.zipCode} ${address!.city}"),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (!compact && actionLabel.isNotEmpty) ...[
+                          Text(actionLabel.toUpperCase(),
+                              style: Theme.of(context).textTheme.button!.copyWith(
+                                fontSize: 10,
+                              )
+                          ),
+                          const SizedBox(height: 4,),
+                        ],
+                        _buildAddressLine(context,
+                            "${address!.firstName} ${address!.lastName}"),
+                        _buildAddressLine(context, address!.street),
+                        _buildAddressLine(
+                            context, "${address!.zipCode} ${address!.city}"),
+                      ],
+                    ),
+                    const Spacer(),
+                    if (address!.isPrimary) Icon(Icons.home, size: 12, color: Theme.of(context).disabledColor),
                   ],
                 ),
               )

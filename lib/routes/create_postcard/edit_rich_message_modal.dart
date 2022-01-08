@@ -7,7 +7,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 Future<dynamic> showEditRichMessageModal(BuildContext context, String? message) {
   return showCupertinoModalBottomSheet(
       context: context,
-      enableDrag: false,
+      //enableDrag: false,
       builder: (context) => Scaffold(
         appBar: AppBar(
           title: const Text("Edit Message"),
@@ -19,6 +19,7 @@ Future<dynamic> showEditRichMessageModal(BuildContext context, String? message) 
           ),
           leading: Container(),
         ),
+        resizeToAvoidBottomInset : false,
         body: EditMessageModalView(message: message,),
       )
   );
@@ -72,69 +73,20 @@ class _EditMessageModalViewState extends State<EditMessageModalView> {
   }
 }
 
-class RichMessageTextObject extends ChangeNotifier {
-  final String text;
-  final TextStyle style;
-  final ValueNotifier<Matrix4> matrix = ValueNotifier(Matrix4.translationValues(8, 8, 0));
-  final String id = const Uuid().v4();
+class RichMessageTextObject {
+  Matrix4? initialPosition;
 
-
-  Size? bounds;
-  TextPainter? painter;
-  bool selected = false;
-
-  RichMessageTextObject(this.text, {
-      this.style = const TextStyle(
-        color: Colors.black,
-        fontSize: 28,
-      ),
+  RichMessageTextObject({
+    this.initialPosition,
   }) {
-    matrix.addListener(() => notifyListeners());
+    initialPosition ??= Matrix4.identity();
   }
 
-  @override
-  String toString() {
-    return "[\"$text\"]";
-  }
+  var textStyle = const TextStyle(
+    fontSize: 40,
+  );
 
-  TextPainter getPainter({double? maxWidth}) {
-    if (painter == null) {
-      TextSpan span = TextSpan(
-        style: style,
-        text: text,
-      );
-
-      TextPainter tp = TextPainter(
-        text: span,
-        textAlign: TextAlign.left,
-        textDirection: TextDirection.ltr,
-      );
-      tp.layout(maxWidth: maxWidth ?? double.infinity);
-      painter = tp;
-    }
-    return painter!;
-  }
-
-  bool testHit(double x, double y) {
-    Matrix4 T = Matrix4.zero();
-    T.copyInverse(matrix.value);
-
-    var hitPos = vector_math_64.Vector3(x, y, 0);
-    var hitT = T.transform3(hitPos);
-    var size = getPainter().size;
-
-    return 0 <= hitT.x && hitT.x <= size.width && 0 <= hitT.y && hitT.y <= size.height;
-  }
-
-  void setSelected(bool selected) {
-    this.selected = selected;
-    notifyListeners();
-  }
-
-  void reset() {
-    matrix.value = Matrix4.translationValues(8, 8, 0);
-    notifyListeners();
-  }
+  var text = "";
 }
 
 class RichMessageEditor extends StatefulWidget {
@@ -145,125 +97,118 @@ class RichMessageEditor extends StatefulWidget {
 }
 
 class _RichMessageEditorState extends State<RichMessageEditor> {
-  final ValueNotifier<Matrix4>? _notifier = ValueNotifier(Matrix4.identity());
-  final List<RichMessageTextObject> _objects = [];
+  final List<RichMessageTextObject> textObjects = [
+    //RichMessageTextObject()
+  ];
 
-  RichMessageTextObject? _selected;
+  RichMessageTextObject? focusedNode;
 
-  @override
-  void initState() {
-    _objects.add(RichMessageTextObject("Lorem Ipsum dolor sit amet consectutir adpiscing elit."));
-    _objects.add(RichMessageTextObject("Dini mueter"));
-    super.initState();
-  }
-
-  void _onMatrixUpdate(Matrix4 m, tm, sm, rm) {
-    _notifier!.value = m;
-    _selected?.matrix.value = m ;
-  }
-
-  void _onTap(TapDownDetails details) {
-    _selected = null;
-    for (RichMessageTextObject object in _objects) {
-      var hit = object.testHit(details.localPosition.dx, details.localPosition.dy);
-      object.setSelected(false);
-      if (hit) {
-        _selected?.setSelected(false);
-        _selected = object;
-        _selected?.setSelected(true);
-      }
+  void _onTapEmpty(TapDownDetails details) {
+    if (focusedNode == null) {
+      textObjects.add(RichMessageTextObject(
+        initialPosition: Matrix4.translation(vector_math_64.Vector3(
+          details.localPosition.dx, details.localPosition.dy, 0,
+        ))
+      ));
+    } else {
+      focusedNode = null;
     }
-    _notifier?.notifyListeners();
     setState(() {});
-  }
-
-  void _onDoubleTap() {
-    _selected?.reset();
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTapDown: _onTap,
-      onDoubleTap: _onDoubleTap,
-      child: MatrixGestureDetector(
-        key: Key(_selected?.id ?? "_"),
-        focalPointAlignment: Alignment.center,
-        onMatrixUpdate: _onMatrixUpdate,
-        child: CustomPaint(
-          painter: RichMessagePainter(context,
-            objects: _objects,
-            notifier: _notifier,
-          ),
-          child: Container(),
+      onTapDown: _onTapEmpty,
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all()
+        ),
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            for (RichMessageTextObject obj in textObjects) DraggableTextLayer(
+              obj: obj,
+              onFocused: () {
+                print("Focus ${obj}");
+                focusedNode = obj;
+              }
+            ),
+          ],
         ),
       ),
     );
   }
 }
 
-class RichMessagePainter extends CustomPainter {
-  final ValueNotifier<Matrix4>? notifier;
-  final List<RichMessageTextObject> objects;
-  late BuildContext context;
+class DraggableTextLayer extends StatefulWidget {
+  final RichMessageTextObject obj;
+  final void Function()? onFocused;
 
-  RichMessagePainter(this.context, {
-    required this.objects,
-    required this.notifier,
-  }) : super(repaint: notifier);
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    var paint = Paint()
-      ..color = Colors.black
-      ..strokeWidth = 1
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round;
-
-    canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), paint);
-
-    for (RichMessageTextObject textObject in objects) {
-      var painter = RichMessageTextObjectPainter(textObject);
-      painter.paint(canvas, size);
-    }
-  }
+  const DraggableTextLayer({
+    Key? key,
+    required this.obj,
+    this.onFocused,
+  }) : super(key: key);
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
-  }
+  _DraggableTextLayerState createState() => _DraggableTextLayerState();
 }
 
-class RichMessageTextObjectPainter extends CustomPainter {
-  final RichMessageTextObject object;
-
-  RichMessageTextObjectPainter(this.object) : super(repaint: object);
+class _DraggableTextLayerState extends State<DraggableTextLayer> {
+  final ValueNotifier<Matrix4> notifier = ValueNotifier(Matrix4.identity());
+  final TextEditingController _textController = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
 
   @override
-  void paint(Canvas canvas, Size size) {
-    canvas.save();
-    canvas.transform(object.matrix.value.storage);
+  void initState() {
+    notifier.value = widget.obj.initialPosition!;
+    _focusNode.addListener(_focusChanged);
+    _focusNode.requestFocus();
+    super.initState();
+  }
 
-    var tp = object.getPainter(maxWidth: size.width - 16);
-    tp.paint(canvas, Offset.zero);
-
-    var textSize = tp.size;
-
-    if (object.selected) {
-      var paint = Paint()
-        ..color = Colors.black
-        ..strokeWidth = 1
-        ..style = PaintingStyle.stroke
-        ..strokeCap = StrokeCap.round;
-
-      canvas.drawRect(Rect.fromLTWH(0, 0, textSize.width, textSize.height), paint);
+  void _focusChanged() {
+    if (_focusNode.hasFocus) {
+      widget.onFocused?.call();
     }
+  }
 
-    canvas.restore();
+  void _textChanged(String value) {
+    widget.obj.text = value;
   }
 
   @override
-  bool shouldRepaint(RichMessageTextObjectPainter oldDelegate) {
-    return true;
+  Widget build(BuildContext context) {
+    return MatrixGestureDetector(
+        onMatrixUpdate: (m, tm, sm, rm) {
+          notifier.value = m;
+        },
+        child: AnimatedBuilder(
+            animation: notifier,
+            builder: (context, child) {
+              return Container(
+                transform: notifier.value,
+                // decoration: BoxDecoration(
+                //   border: Border.all(),
+                // ),
+                child: TextField(
+                  controller: _textController,
+                  onChanged: _textChanged,
+                  focusNode: _focusNode,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    //border: InputBorder.none,
+                  ),
+                  minLines: null,
+                  maxLines: null,
+                  style: TextStyle(
+                    fontSize: 40,
+                  ),
+                ),
+              );
+            }
+        ),
+    );
   }
 }
