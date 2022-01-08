@@ -98,6 +98,8 @@ class _UsernamePasswordFormState extends State<UsernamePasswordForm> {
   final _authBloc = getIt<AuthenticationBloc>();
 
   final _formKey = GlobalKey<FormState>();
+  final _scopeNode = FocusScopeNode();
+
   late TextEditingController _usernameController;
   late TextEditingController _passwordController;
 
@@ -180,41 +182,50 @@ class _UsernamePasswordFormState extends State<UsernamePasswordForm> {
                         )),
                       ),
                       const SizedBox(height: 24.0,),
-                      Form(
-                        key: _formKey,
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        onChanged: _formInputChanged,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            TextFormField(
-                              controller: _usernameController,
-                              validator: validateEmail,
-                              autofocus: true,
-                              decoration: const InputDecoration(
-                                  label: Text("Email"),
-                                  border: OutlineInputBorder()
+                      FocusScope(
+                        node: _scopeNode,
+                        child: Form(
+                          key: _formKey,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          onChanged: _formInputChanged,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              TextFormField(
+                                controller: _usernameController,
+                                validator: validateEmail,
+                                autofocus: true,
+                                keyboardType: TextInputType.emailAddress,
+                                textInputAction: TextInputAction.next,
+                                onEditingComplete: _scopeNode.nextFocus,
+                                decoration: const InputDecoration(
+                                    label: Text("Email"),
+                                    border: OutlineInputBorder()
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: 16.0,),
-                            TextFormField(
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter some text';
-                                }
-                                return null;
-                              },
-                              controller: _passwordController,
-                              decoration: const InputDecoration(
-                                label: Text("Password"),
-                                border: OutlineInputBorder(),
+                              const SizedBox(height: 16.0,),
+                              TextFormField(
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter some text';
+                                  }
+                                  return null;
+                                },
+                                controller: _passwordController,
+                                keyboardType: TextInputType.visiblePassword,
+                                textInputAction: TextInputAction.done,
+                                onEditingComplete: _submitButtonPressed,
+                                decoration: const InputDecoration(
+                                  label: Text("Password"),
+                                  border: OutlineInputBorder(),
+                                ),
+                                obscureText: true,
                               ),
-                              obscureText: true,
-                            ),
-                            if (_hasError) ...[
-                              Alert(errorMessage: _errorMessage),
+                              if (_hasError) ...[
+                                Alert(errorMessage: _errorMessage),
+                              ],
                             ],
-                          ],
+                          ),
                         ),
                       ),
                       const Spacer(),
@@ -225,7 +236,7 @@ class _UsernamePasswordFormState extends State<UsernamePasswordForm> {
                               style: ElevatedButton.styleFrom(
                                 minimumSize: const Size.fromHeight(40),
                               ),
-                              onPressed: authState is LoggingIn ? null : _submitButtonPressed,
+                              onPressed: authState is LoggingIn || !_formKey.currentState!.validate() ? null : _submitButtonPressed,
                               child: Text(widget.submitButtonText.toUpperCase())
                           ),
                           TextButton(

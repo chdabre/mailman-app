@@ -110,7 +110,5 @@ class AddressRestRepository extends AddressRepository {
       _log.warning('Failed to update Address', error, stacktrace);
     }
   }
-
-
 }
 
