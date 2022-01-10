@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
 import 'package:meta/meta.dart';
@@ -12,6 +14,7 @@ class PostcardJobEntity extends Equatable {
   static const String _fieldTimeSent = 'time_sent';
   static const String _fieldFrontImage = 'front_image';
   static const String _fieldMessageImage = 'text_image';
+  static const String _fieldRichMessageData = 'rich_message_data';
   static const String _fieldIsLandscape = 'is_landscape';
   static const String _fieldMessage = 'message';
   static const String _fieldSender = 'sender';
@@ -26,7 +29,9 @@ class PostcardJobEntity extends Equatable {
 
   final String? frontImage;
   final String? frontImageUrl;
+  final String? messageImage;
   final String? messageImageUrl;
+  final Map<String, dynamic>? richMessageData;
   final bool? isLandscape;
   final String? backImage;
   final String? message;
@@ -41,7 +46,9 @@ class PostcardJobEntity extends Equatable {
     this.timeSent,
     this.frontImage,
     this.frontImageUrl,
+    this.messageImage,
     this.messageImageUrl,
+    this.richMessageData,
     this.isLandscape,
     this.backImage,
     this.message,
@@ -49,18 +56,19 @@ class PostcardJobEntity extends Equatable {
     this.recipient,
   });
 
-  static PostcardJobEntity fromJson(Map<String, dynamic> json) =>
+  static PostcardJobEntity fromJson(Map<String, dynamic> jsonData) =>
       PostcardJobEntity(
-        id: json[_fieldId],
-        status: json[_fieldStatus],
-        sendOn: DateTime.parse(json[_fieldSendOn]).toLocal(),
-        timeSent: json[_fieldTimeSent] != null ? DateTime.parse(json[_fieldTimeSent]).toLocal() : null,
-        frontImageUrl: json[_fieldFrontImage],
-        messageImageUrl: json[_fieldMessageImage],
-        isLandscape: json[_fieldIsLandscape],
-        message: json[_fieldMessage],
-        sender: AddressEntity.fromJson(json[_fieldSender]),
-        recipient: AddressEntity.fromJson(json[_fieldRecipient]),
+        id: jsonData[_fieldId],
+        status: jsonData[_fieldStatus],
+        sendOn: DateTime.parse(jsonData[_fieldSendOn]).toLocal(),
+        timeSent: jsonData[_fieldTimeSent] != null ? DateTime.parse(jsonData[_fieldTimeSent]).toLocal() : null,
+        frontImageUrl: jsonData[_fieldFrontImage],
+        messageImageUrl: jsonData[_fieldMessageImage],
+        richMessageData: jsonData[_fieldRichMessageData] != null ? json.decode(jsonData[_fieldRichMessageData]): null,
+        isLandscape: jsonData[_fieldIsLandscape],
+        message: jsonData[_fieldMessage],
+        sender: AddressEntity.fromJson(jsonData[_fieldSender]),
+        recipient: AddressEntity.fromJson(jsonData[_fieldRecipient]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -69,6 +77,8 @@ class PostcardJobEntity extends Equatable {
     if (recipient != null) _fieldRecipientId: recipient!.id,
     if (message != null) _fieldMessage: message,
     if (frontImage != null) _fieldFrontImage: frontImage,
+    if (messageImage != null) _fieldMessageImage: messageImage,
+    if (richMessageData != null) _fieldRichMessageData: json.encode(richMessageData),
   };
 
   @override

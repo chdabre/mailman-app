@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:mailman/components/postcard_preview.dart';
 import 'package:mailman/model/postcard.dart';
 import 'package:mailman/repository/jobs_repository.dart';
+import 'package:mailman/routes/create_postcard/create_postcard.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 final GetIt getIt = GetIt.instance;
@@ -36,6 +37,11 @@ class _QuickActionsModalViewState extends State<QuickActionsModalView> {
     Navigator.of(context).pop(true);
   }
 
+  void _editPostcard() async {
+    var updated = await Navigator.pushNamed(context, CreatePostcardRoute.routeName, arguments: widget.postcard);
+    if (updated != null) Navigator.of(context).pop(true);
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -50,15 +56,13 @@ class _QuickActionsModalViewState extends State<QuickActionsModalView> {
               onTap: _deletePostcard,
               leading: const Icon(Icons.delete),
               title: const Text("Delete"),
-            )
+            ),
           ],
         ),
       ),
     );
   }
 }
-
-
 
 class EditMessageModalView extends StatefulWidget {
   final String? message;

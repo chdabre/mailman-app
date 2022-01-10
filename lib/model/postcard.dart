@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 import 'package:mailman/entity/postcard_job_entity.dart';
+import 'package:mailman/model/rich_message_data.dart';
 import 'package:meta/meta.dart';
 import 'package:mailman/model/address.dart';
 
@@ -10,7 +11,9 @@ import 'package:mailman/model/address.dart';
 class Postcard extends Equatable {
   final File? frontImage;
   final String? frontImageUrl;
+  final File? messageImage;
   final String? messageImageUrl;
+  final RichMessageData? messageData;
   final bool isLandscape;
 
   final String? message;
@@ -25,7 +28,9 @@ class Postcard extends Equatable {
   const Postcard({
     this.frontImage,
     this.frontImageUrl,
+    this.messageImage,
     this.messageImageUrl,
+    this.messageData,
     this.isLandscape = true,
     this.message,
     this.sender,
@@ -37,11 +42,11 @@ class Postcard extends Equatable {
   });
 
   bool hasFrontImage() {
-    return frontImage != null;
+    return frontImage != null || frontImageUrl != null;
   }
 
   bool isValid() {
-    return frontImage != null &&
+    return hasFrontImage() &&
         message != null &&
         sender != null &&
         recipient != null;
@@ -50,6 +55,9 @@ class Postcard extends Equatable {
   Postcard copyWith({
     File? frontImage,
     String? frontImageUrl,
+    File? messageImage,
+    String? messageImageUrl,
+    RichMessageData? messageData,
     bool? isLandscape,
     String? message,
     Address? sender,
@@ -57,6 +65,9 @@ class Postcard extends Equatable {
   }) => Postcard(
     frontImage: frontImage ?? this.frontImage,
     frontImageUrl: frontImageUrl ?? this.frontImageUrl,
+    messageImage: messageImage ?? this.messageImage,
+    messageImageUrl: messageImageUrl ?? this.messageImageUrl,
+    messageData: messageData ?? this.messageData,
     isLandscape: isLandscape ?? this.isLandscape,
     message: message ?? this.message,
     sender: sender ?? this.sender,
@@ -69,6 +80,8 @@ class Postcard extends Equatable {
         recipient: recipient?.toEntity(),
         message: message,
         frontImage: frontImage != null ? base64Encode(frontImage!.readAsBytesSync()) : null,
+        messageImage: messageImage != null ? base64Encode(messageImage!.readAsBytesSync()) : null,
+        richMessageData: messageData != null ? messageData!.toEntity().toJson() : null,
         id: id,
       );
   

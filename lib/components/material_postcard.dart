@@ -147,7 +147,8 @@ class MaterialPostcardBack extends StatelessWidget {
                     MessagePreview(
                       onTap: onEditMessage,
                       message: postcard?.message,
-                      messageImage: postcard?.messageImageUrl,
+                      messageImageUrl: postcard?.messageImageUrl,
+                      messageImage: postcard?.messageImage,
                       compact: true,
                       actionLabel: "Message",
                     ),

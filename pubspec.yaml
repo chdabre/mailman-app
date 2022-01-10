@@ -29,6 +29,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   http: ^0.13.4
   flutter_secure_storage: ^4.1.0
   oauth2_client: ^2.3.1
@@ -55,6 +57,8 @@ dependencies:
   firebase_core: ^1.10.6
   firebase_analytics: ^9.0.4
   flutter_slidable: ^1.2.0
+  screenshot: ^1.2.3
+  path_provider: ^2.0.8
 
 
 dev_dependencies:

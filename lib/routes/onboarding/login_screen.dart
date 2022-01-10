@@ -56,7 +56,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
           switchMode: _switchMode,
           onAuthCompleted: widget.onAuthCompleted,
           submitButtonPressed: _signupAction,
-          title: "Create an account",
+          title: "Create a Mailman account",
           submitButtonText: "Create Account",
           switchModeText: "I already have an account",
         ) :
@@ -64,7 +64,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
           switchMode: _switchMode,
           onAuthCompleted: widget.onAuthCompleted,
           submitButtonPressed: _loginAction,
-          title: "Log in to your account",
+          title: "Log in to your Mailman account",
           submitButtonText: "Log in",
           switchModeText: "Create an account",
         )
@@ -181,6 +181,7 @@ class _UsernamePasswordFormState extends State<UsernamePasswordForm> {
                           fontWeight: FontWeight.w600,
                         )),
                       ),
+                      const Text("You can authorize your Postcard Creator Account in the next step."),
                       const SizedBox(height: 24.0,),
                       FocusScope(
                         node: _scopeNode,
@@ -236,7 +237,7 @@ class _UsernamePasswordFormState extends State<UsernamePasswordForm> {
                               style: ElevatedButton.styleFrom(
                                 minimumSize: const Size.fromHeight(40),
                               ),
-                              onPressed: authState is LoggingIn || !_formKey.currentState!.validate() ? null : _submitButtonPressed,
+                              onPressed: authState is LoggingIn ? null : _submitButtonPressed,
                               child: Text(widget.submitButtonText.toUpperCase())
                           ),
                           TextButton(

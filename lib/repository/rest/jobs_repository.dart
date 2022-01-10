@@ -15,7 +15,10 @@ class JobsRestRepository extends JobsRepository {
     try {
       var entity = postcard.toJobEntity();
       var requestData = entity.toJson();
-      _log.info('Creating new Postcard Job with request data $requestData');
+      var requestPreview = entity.toJson();
+      if (requestPreview['front_image'] != null) requestPreview['front_image'] = '<Image b64>';
+      if (requestPreview['text_image'] != null) requestPreview['text_image'] = '<Image b64>';
+      _log.info('Creating new Postcard Job with request data $requestPreview');
 
       var response = await _client.post('/api/v1/jobs/',
         data: requestData,
@@ -28,6 +31,30 @@ class JobsRestRepository extends JobsRepository {
       );
     } on IOError catch (error, stacktrace) {
       _log.warning('Failed to create Postcard Job (${error.code} | ${error.message} | ${error.data})', error, stacktrace);
+    }
+  }
+
+  @override
+  Future<Postcard?> update(Postcard postcard) async {
+    try {
+      var entity = postcard.toJobEntity();
+      var requestData = entity.toJson();
+      var requestPreview = entity.toJson();
+      if (requestPreview['front_image'] != null) requestPreview['front_image'] = '<Front Image>';
+      if (requestPreview['text_image'] != null) requestPreview['text_image'] = '<Text Image>';
+      _log.info('Updating Postcard Job ${entity.id} with request data $requestPreview');
+
+      var response = await _client.patch('/api/v1/jobs/${entity.id}/',
+        data: requestData,
+      );
+
+      _log.info('Updated Job $response');
+
+      return Postcard.fromJobEntity(
+          PostcardJobEntity.fromJson(response)
+      );
+    } on IOError catch (error, stacktrace) {
+      _log.warning('Failed to update Postcard Job (${error.code} | ${error.message} | ${error.data})', error, stacktrace);
     }
   }
 

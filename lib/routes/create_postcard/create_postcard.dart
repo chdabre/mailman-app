@@ -9,6 +9,7 @@ import 'package:mailman/bloc/address/bloc.dart';
 import 'package:mailman/components/postcard_preview.dart';
 import 'package:mailman/image_utils.dart';
 import 'package:mailman/model/postcard.dart';
+import 'package:mailman/model/rich_message_data.dart';
 import 'package:mailman/repository/jobs_repository.dart';
 import 'package:mailman/repository/rest/api_client.dart';
 import 'package:mailman/routes/create_postcard/choose_address_modal.dart';
@@ -21,7 +22,9 @@ final GetIt getIt = GetIt.instance;
 class CreatePostcardRoute extends StatefulWidget {
   static const routeName = '/create';
 
-  const CreatePostcardRoute({Key? key}) : super(key: key);
+  const CreatePostcardRoute({
+    Key? key,
+  }) : super(key: key);
 
   @override
   _CreatePostcardRouteState createState() => _CreatePostcardRouteState();
@@ -42,6 +45,16 @@ class _CreatePostcardRouteState extends State<CreatePostcardRoute> {
       sender: addressBloc.state.getPrimaryAddress(),
     );
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    final postcard = ModalRoute.of(context)!.settings.arguments as Postcard?;
+    if(postcard?.id != null) {
+      _postcard = postcard!;
+      setState(() {});
+    }
+    super.didChangeDependencies();
   }
 
   void _pickFrontImage() async {
@@ -94,11 +107,20 @@ class _CreatePostcardRouteState extends State<CreatePostcardRoute> {
   }
 
   void _editMessage(BuildContext context) async {
-    var newMessage = await showEditMessageModal(context, _postcard.message);
-    _postcard = _postcard.copyWith(
-      message: newMessage,
+    var messageData = _postcard.messageData ?? RichMessageData.empty.copyWith(
+      message: _postcard.message ?? '',
     );
-    setState(() {});
+
+    RichMessageEditResult? newMessage = await showEditRichMessageModal(context, messageData);
+
+    if (newMessage != null) {
+      _postcard = _postcard.copyWith(
+        message: newMessage.messageData.message,
+        messageData: newMessage.messageData,
+        messageImage: newMessage.textImage,
+      );
+      setState(() {});
+    }
   }
 
   void _pickSenderAddress(BuildContext context) async {
@@ -128,8 +150,14 @@ class _CreatePostcardRouteState extends State<CreatePostcardRoute> {
     setState(() {});
     var jobsRepository = getIt<JobsRepository>();
     try {
-      var created = await jobsRepository.create(_postcard);
-      Navigator.pop(context, created);
+      Postcard? result;
+      print(_postcard);
+      if (_postcard.id != null) {
+        result = await jobsRepository.update(_postcard);
+      } else {
+        result = await jobsRepository.create(_postcard);
+      }
+      Navigator.pop(context, result);
     } on IOError {
       // TODO Error handling
     } finally {

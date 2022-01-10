@@ -18,6 +18,6 @@ class ImageUtils {
       width = x;
     }
     var resized = copyResize(image!, width: width, height: height);
-    return File(imageFile.path + '-resized.jpg').writeAsBytes(encodeJpg(resized, quality: 50));
+    return File(imageFile.path + '-resized.png').writeAsBytes(encodePng(resized));
   }
 }

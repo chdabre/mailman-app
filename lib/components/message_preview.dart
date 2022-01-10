@@ -1,11 +1,15 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:mailman/components/icon_and_text_label.dart';
 
 class MessagePreview extends StatelessWidget {
   const MessagePreview({
     Key? key,
     this.message,
+    this.messageImageUrl,
     this.messageImage,
     this.onTap,
     this.compact = false,
@@ -14,17 +18,27 @@ class MessagePreview extends StatelessWidget {
 
   final bool compact;
   final String? message;
-  final String? messageImage;
+  final File? messageImage;
+  final String? messageImageUrl;
   final String actionLabel;
   final void Function()? onTap;
 
   final double _messagePreviewBorderRadius = 3;
 
+  ImageProvider? _getMessageImage() {
+    if (messageImage != null) {
+      return FileImage(messageImage!);
+    }
+    else if (messageImageUrl != null) {
+      return CachedNetworkImageProvider(messageImageUrl!);
+    }
+  }
+
   Widget _buildTextPreview(BuildContext context) {
-    if (message == null && messageImage == null) {
+    if (message == null && _getMessageImage() == null) {
       return const IconAndTextLabel(icon: Icons.edit, actionLabel: "Message");
     }
-    if (message != null && messageImage == null) {
+    if (message != null && _getMessageImage() == null) {
       return SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -74,12 +88,12 @@ class MessagePreview extends StatelessWidget {
         child: InkWell(
             onTap: onTap,
             child: Container(
-                decoration: messageImage != null ?
+                decoration: _getMessageImage() != null ?
                 BoxDecoration(
                     borderRadius: BorderRadius.circular(_messagePreviewBorderRadius),
                     image: DecorationImage(
                       fit: BoxFit.fill,
-                      image: CachedNetworkImageProvider(messageImage!),
+                      image: _getMessageImage()!,
                     )) :
                   BoxDecoration(
                     borderRadius:

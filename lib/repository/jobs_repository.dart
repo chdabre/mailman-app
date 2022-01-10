@@ -9,6 +9,8 @@ abstract class JobsRepository {
 
   Future<Postcard?> create(Postcard postcard);
 
+  Future<Postcard?> update(Postcard postcard);
+
   Future<void> delete(Postcard postcard);
 }
 
