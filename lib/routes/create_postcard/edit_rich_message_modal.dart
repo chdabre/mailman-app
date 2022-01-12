@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -72,7 +71,7 @@ class _EditMessageModalViewState extends State<EditMessageModalView> {
   void _confirmButtonPressed() async {
     setState(() { working = true; });
     final textImage = await _messageEditor.currentState!.toImageFile();
-    final textImageResized = await ImageUtils.resizeImageMaintainOrientation(textImage, height: 720, width: 744);
+    final textImageResized = await ImageUtils.resizeImageMaintainOrientation(textImage, width: 720, height: 744);
 
     Navigator.pop(context, RichMessageEditResult(
         messageData: messageData,
@@ -152,18 +151,21 @@ class RichMessageEditorState extends State<RichMessageEditor> {
   }
 
   Widget _buildScreenshotContext(Widget child) {
-    return MediaQuery(
-      data: const MediaQueryData(),
-      child: Localizations(
-        locale: const Locale('en'),
-        delegates: const [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-        ],
-        child: Material(
-          child: child,
-          color: Colors.white,
-        )
+    return AspectRatio(
+      aspectRatio: 720 / 744,
+      child: MediaQuery(
+        data: const MediaQueryData(),
+        child: Localizations(
+          locale: const Locale('en'),
+          delegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+          ],
+          child: Material(
+            child: child,
+            color: Colors.white,
+          )
+        ),
       ),
     );
   }
@@ -199,40 +201,45 @@ class RichMessageEditorState extends State<RichMessageEditor> {
   }
 
   Widget _buildEditField({bool isPreview = false}) {
-    return AspectRatio(
-      aspectRatio: 720 / 744,
-      child: Stack(
-        alignment: Alignment.topRight,
-        children: [
-          TextField(
-            controller: _messageController,
-            focusNode: _textFieldFocusNode,
-            onChanged: _onMessageChanged,
-            style: widget.message.textStyle,
-            textAlign: widget.message.textAlign,
-            textAlignVertical: widget.message.textAlignVertical,
-            decoration: InputDecoration(
-              enabledBorder: isPreview ? const OutlineInputBorder(borderSide: BorderSide(
-                color: Colors.transparent,
-              )) : null,
-              border: const OutlineInputBorder(),
-              label: Center(child: Text("Tap to Edit Text",
-                style: Theme.of(context).textTheme.bodyText2,
-              ),),
-              floatingLabelBehavior: FloatingLabelBehavior.never,
-            ),
-            minLines: null,
-            maxLines: null,
-            expands: true,
-            scrollPhysics: const NeverScrollableScrollPhysics(),
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 500),
+        child: AspectRatio(
+          aspectRatio: 720 / 744,
+          child: Stack(
+            alignment: Alignment.topRight,
+            children: [
+              TextField(
+                controller: _messageController,
+                focusNode: _textFieldFocusNode,
+                onChanged: _onMessageChanged,
+                style: widget.message.textStyle,
+                textAlign: widget.message.textAlign,
+                textAlignVertical: widget.message.textAlignVertical,
+                decoration: InputDecoration(
+                  enabledBorder: isPreview ? const OutlineInputBorder(borderSide: BorderSide(
+                    color: Colors.transparent,
+                  )) : null,
+                  border: const OutlineInputBorder(),
+                  label: !isPreview ? Center(child: Text("Tap to Edit Text",
+                    style: Theme.of(context).textTheme.bodyText2,
+                  ),) : null,
+                  floatingLabelBehavior: FloatingLabelBehavior.never,
+                ),
+                minLines: null,
+                maxLines: null,
+                expands: true,
+                scrollPhysics: const NeverScrollableScrollPhysics(),
+              ),
+              if (_textFieldFocusNode.hasPrimaryFocus && !isPreview) IconButton(
+                onPressed: _textFieldFocusNode.unfocus,
+                splashRadius: 16,
+                //color: Theme.of(context).primaryColor,
+                icon: const Icon(Icons.check_circle),
+              ),
+            ],
           ),
-          if (_textFieldFocusNode.hasPrimaryFocus && !isPreview) IconButton(
-            onPressed: _textFieldFocusNode.unfocus,
-            splashRadius: 16,
-            //color: Theme.of(context).primaryColor,
-            icon: const Icon(Icons.check_circle),
-          ),
-        ],
+        ),
       ),
     );
   }

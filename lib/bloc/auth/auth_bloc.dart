@@ -80,8 +80,13 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     });
 
     on<Logout>((event, emit) async {
-      await authRepository.logout();
-      emit(Unauthenticated());
+      try {
+        await authRepository.logout();
+      } on IOError catch (e) {
+        // TODO Handle error
+      } finally {
+        emit(Unauthenticated());
+      }
     });
   }
 }

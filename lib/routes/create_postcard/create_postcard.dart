@@ -88,6 +88,7 @@ class _CreatePostcardRouteState extends State<CreatePostcardRoute> {
           width: 1819,
           height: 1311,
           isLandscape: isLandscape,
+          rotate: true,
         );
 
         _postcard = _postcard.copyWith(

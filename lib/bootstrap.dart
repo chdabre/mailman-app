@@ -184,7 +184,6 @@ class _ApplicationLauncherState extends State<ApplicationLauncher> with WidgetsB
 
     final notificationService = CloudNotificationService.instance;
     await notificationService.init();
-    await widget.userRepository.registerFCMId();
 
     _logApplicationStarted();
   }

@@ -6,6 +6,7 @@ import 'package:mailman/bloc/jobs/bloc.dart';
 import 'package:mailman/components/app_bar.dart';
 import 'package:mailman/components/postcard_preview.dart';
 import 'package:mailman/model/postcard.dart';
+import 'package:mailman/repository/user_repository.dart';
 import 'package:mailman/routes/create_postcard/create_postcard.dart';
 import 'package:mailman/routes/home/postcard_quick_actions_modal.dart';
 import 'package:mailman/routes/onboarding/sign_up_modal.dart';
@@ -26,11 +27,14 @@ class HomeRoute extends StatefulWidget {
 
 class _HomeRouteState extends State<HomeRoute> {
   final _jobsBloc = getIt<JobsBloc>();
+  final _userRepository = getIt<UserRepository>();
 
-  void _authListener(BuildContext context, AuthenticationState state) {
+  void _authListener(BuildContext context, AuthenticationState state) async {
     if (state is Unauthenticated) {
       var signUpModal = SignUpModal.instance;
       signUpModal.startSignUp(context: context);
+    } else if (state is Authenticated) {
+      await _userRepository.registerFCMId();
     }
   }
 
