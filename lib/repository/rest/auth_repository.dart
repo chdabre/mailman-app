@@ -4,6 +4,7 @@ import 'package:mailman/model/authentication_result.dart';
 import 'package:mailman/repository/auth_repository.dart';
 import 'package:mailman/repository/rest/api_client.dart';
 import 'package:mailman/secured_storage.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class AuthRestRepository extends AuthRepository {
   final Logger _log = Logger('AuthRepository');
@@ -46,6 +47,12 @@ class AuthRestRepository extends AuthRepository {
       );
     } on IOError catch (error, stacktrace) {
       _log.info('Failed to login', error.data, stacktrace);
+
+      await Sentry.captureException(
+        error,
+        stackTrace: stacktrace,
+      );
+
       rethrow;
     }
   }
@@ -61,6 +68,12 @@ class AuthRestRepository extends AuthRepository {
         _log.info('Success');
       } on IOError catch (error, stacktrace) {
         _log.info('Failed to logout', error, stacktrace);
+
+        await Sentry.captureException(
+          error,
+          stackTrace: stacktrace,
+        );
+
         rethrow;
       } finally {
         deleteToken();
@@ -92,6 +105,12 @@ class AuthRestRepository extends AuthRepository {
       );
     } on IOError catch (error, stacktrace) {
       _log.info('Failed to register', error, stacktrace);
+
+      await Sentry.captureException(
+        error,
+        stackTrace: stacktrace,
+      );
+
       rethrow;
     }
   }

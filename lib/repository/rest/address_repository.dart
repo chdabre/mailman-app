@@ -3,6 +3,7 @@ import 'package:mailman/entity/address_entity.dart';
 import 'package:mailman/model/address.dart';
 import 'package:mailman/repository/rest/api_client.dart';
 import 'package:mailman/repository/address_repository.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class AddressRestRepository extends AddressRepository {
   final Logger _log = Logger('AddressRepository');
@@ -31,6 +32,11 @@ class AddressRestRepository extends AddressRepository {
     } on IOError catch (error, stacktrace) {
       _log.severe("Failed listing Addresses", error, stacktrace);
 
+      await Sentry.captureException(
+        error,
+        stackTrace: stacktrace,
+      );
+
       return [];
     }
   }
@@ -54,6 +60,12 @@ class AddressRestRepository extends AddressRepository {
       );
     } on IOError catch (error, stacktrace) {
       _log.warning('Failed to retrieve Address', error, stacktrace);
+
+      await Sentry.captureException(
+        error,
+        stackTrace: stacktrace,
+      );
+
     }
   }
 
@@ -75,6 +87,11 @@ class AddressRestRepository extends AddressRepository {
       );
     } on IOError catch (error, stacktrace) {
       _log.warning('Failed to create Address', error, stacktrace);
+
+      await Sentry.captureException(
+        error,
+        stackTrace: stacktrace,
+      );
     }
   }
 
@@ -108,6 +125,11 @@ class AddressRestRepository extends AddressRepository {
       );
     } on IOError catch (error, stacktrace) {
       _log.warning('Failed to update Address', error, stacktrace);
+
+      await Sentry.captureException(
+        error,
+        stackTrace: stacktrace,
+      );
     }
   }
 }

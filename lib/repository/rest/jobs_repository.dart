@@ -3,6 +3,7 @@ import 'package:mailman/entity/postcard_job_entity.dart';
 import 'package:mailman/model/postcard.dart';
 import 'package:mailman/repository/jobs_repository.dart';
 import 'package:mailman/repository/rest/api_client.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class JobsRestRepository extends JobsRepository {
   final Logger _log = Logger('JobsRepository');
@@ -31,6 +32,11 @@ class JobsRestRepository extends JobsRepository {
       );
     } on IOError catch (error, stacktrace) {
       _log.warning('Failed to create Postcard Job (${error.code} | ${error.message} | ${error.data})', error, stacktrace);
+
+      await Sentry.captureException(
+        error,
+        stackTrace: stacktrace,
+      );
     }
   }
 
@@ -55,6 +61,11 @@ class JobsRestRepository extends JobsRepository {
       );
     } on IOError catch (error, stacktrace) {
       _log.warning('Failed to update Postcard Job (${error.code} | ${error.message} | ${error.data})', error, stacktrace);
+
+      await Sentry.captureException(
+        error,
+        stackTrace: stacktrace,
+      );
     }
   }
 
@@ -70,6 +81,11 @@ class JobsRestRepository extends JobsRepository {
 
     } on IOError catch (error, stacktrace) {
       _log.warning('Failed to delete Postcard Job (${error.code} | ${error.message} | ${error.data})', error, stacktrace);
+
+      await Sentry.captureException(
+        error,
+        stackTrace: stacktrace,
+      );
     }
   }
 
@@ -95,6 +111,11 @@ class JobsRestRepository extends JobsRepository {
           ).toList();
     } on IOError catch (error, stacktrace) {
       _log.severe("Failed listing Jobs", error, stacktrace);
+
+      await Sentry.captureException(
+        error,
+        stackTrace: stacktrace,
+      );
 
       return [];
     }

@@ -3,6 +3,7 @@ import 'package:mailman/entity/credentials_entity.dart';
 import 'package:mailman/model/credentials.dart';
 import 'package:mailman/repository/credentials_repository.dart';
 import 'package:mailman/repository/rest/api_client.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class CredentialsRestRepository extends CredentialsRepository {
   final Logger _log = Logger('CredentialsRepository');
@@ -23,6 +24,12 @@ class CredentialsRestRepository extends CredentialsRepository {
       return _mapCredentialsFromJson(response['data']);
     } on IOError catch (error, stacktrace) {
       _log.warning('Failed to fetch credentials', error, stacktrace);
+
+      await Sentry.captureException(
+        error,
+        stackTrace: stacktrace,
+      );
+
       return List<Credentials>.empty();
     }
   }
@@ -51,6 +58,12 @@ class CredentialsRestRepository extends CredentialsRepository {
       );
     } on IOError catch (error, stacktrace) {
       _log.warning('Failed to create credentials', error, stacktrace);
+
+      await Sentry.captureException(
+        error,
+        stackTrace: stacktrace,
+      );
+
     }
   }
 

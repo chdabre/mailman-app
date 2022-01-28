@@ -6,6 +6,7 @@ import 'package:mailman/repository/rest/api_client.dart';
 import 'package:mailman/repository/user_repository.dart';
 import 'package:mailman/secured_storage.dart';
 import 'package:mailman/services/cloud_notification_service.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 import '../../platform/platform_utils.dart';
 
@@ -35,6 +36,12 @@ class UserRestRepository extends UserRepository {
       );
     } on IOError catch (error, stacktrace) {
       _log.info('Failed to fetch user', error.data, stacktrace);
+
+      await Sentry.captureException(
+        error,
+        stackTrace: stacktrace,
+      );
+
       rethrow;
     }
   }
@@ -64,6 +71,12 @@ class UserRestRepository extends UserRepository {
       return FCMDeviceEntity.fromJson(response);
     } on IOError catch (error, stacktrace) {
       _log.info('Failed to register FCM Id', error.data, stacktrace);
+
+      await Sentry.captureException(
+        error,
+        stackTrace: stacktrace,
+      );
+
       rethrow;
     }
   }
