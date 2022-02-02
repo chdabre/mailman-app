@@ -50,6 +50,7 @@
   "postcardSenderAddressPlaceholder": "Absender",
   "postcardRecipientAddressPlaceholder": "Empfänger",
   "postcardImagePlaceholder": "Bild wählen",
+  "errorWithMessage": "Fehler: {error}",
   "validationEmailInvalid": "Gebe eine gültige E-Mail-Adresse ein",
   "validationNonEmptyString": "Pflichtfeld",
   "formFieldEmail": "E-Mail",
