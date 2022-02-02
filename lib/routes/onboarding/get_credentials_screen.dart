@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mailman/bloc/credentials/bloc.dart';
 import 'package:mailman/repository/credentials_repository.dart';
 import 'package:mailman/services/postcard_auth_service.dart';
@@ -62,14 +63,14 @@ class _GetCredentialsScreenState extends State<GetCredentialsScreen> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 16.0),
-                        child: Text("Connect your Postcard Creator Account",
+                        child: Text(AppLocalizations.of(context)!.credentialsTitle,
                           style: Theme.of(context).textTheme.headline5!.copyWith(
                             fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
                       const SizedBox(height: 16,),
-                      Text("Mailman connects with your Postcard Creator account. Click the button below and sign in securely on post.ch.",
+                      Text(AppLocalizations.of(context)!.credentialsDescription,
                         style: Theme.of(context).textTheme.bodyText1,
                       ),
                       const SizedBox(height: 24,),
@@ -83,7 +84,7 @@ class _GetCredentialsScreenState extends State<GetCredentialsScreen> {
                     minimumSize: const Size.fromHeight(48),
                     elevation: 0,
                   ),
-                  child: Text("Connect my Account".toUpperCase())
+                  child: Text(AppLocalizations.of(context)!.credentialsAuthorizeButton.toUpperCase())
               ),
             ],
           ),

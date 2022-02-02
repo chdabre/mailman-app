@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get_it/get_it.dart';
@@ -18,7 +19,7 @@ Future<dynamic> showChooseAddressModal(BuildContext context, {
       context: context,
       builder: (context) => Scaffold(
         appBar: AppBar(
-          title: Text(titleText ?? "Choose Address"),
+          title: Text(titleText ?? AppLocalizations.of(context)!.chooseAddressTitle),
           backgroundColor: Theme.of(context).backgroundColor,
           elevation: 0,
           flexibleSpace: Column(
@@ -105,7 +106,7 @@ class _ChooseAddressModalViewState extends State<ChooseAddressModalView> {
                         const Divider(),
                         ListTile(
                           leading: const Icon(Icons.add),
-                          title: const Text("Add new Address"),
+                          title: Text(AppLocalizations.of(context)!.createAddressButton),
                           onTap: () => _createAddress(context),
                         ),
                       ],
@@ -124,7 +125,7 @@ class _ChooseAddressModalViewState extends State<ChooseAddressModalView> {
                   minimumSize: const Size.fromHeight(48),
                   elevation: 0,
                 ),
-                child: Text("Confirm".toUpperCase())
+                child: Text(AppLocalizations.of(context)!.confirmAddressButton.toUpperCase())
             ),
           ),
         ],

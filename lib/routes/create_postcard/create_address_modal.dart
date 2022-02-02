@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mailman/bloc/address/bloc.dart';
 import 'package:mailman/components/alert.dart';
 import 'package:mailman/model/address.dart';
 import 'package:mailman/repository/address_repository.dart';
 import 'package:mailman/repository/rest/api_client.dart';
+import 'package:mailman/utils/validation.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 final GetIt getIt = GetIt.instance;
@@ -15,7 +17,7 @@ Future<dynamic> showCreateAddressModal(BuildContext context) {
       context: context,
       builder: (context) => Scaffold(
         appBar: AppBar(
-          title: const Text("Create Address"),
+          title: Text(AppLocalizations.of(context)!.createAddressTitle),
           backgroundColor: Theme.of(context).backgroundColor,
           elevation: 0,
           flexibleSpace: Column(
@@ -79,13 +81,6 @@ class _CreateAddressModalViewState extends State<CreateAddressModalView> {
     setState(() {});
   }
 
-  String? _fieldValidator(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please enter some text';
-    }
-    return null;
-  }
-
   @override
   void initState() {
     _firstNameController = TextEditingController();
@@ -126,14 +121,14 @@ class _CreateAddressModalViewState extends State<CreateAddressModalView> {
                                 Flexible(
                                   child: TextFormField(
                                     controller: _firstNameController,
-                                    validator: _fieldValidator,
+                                    validator: nonEmptyStringValidator(context),
                                     autofocus: true,
                                     keyboardType: TextInputType.name,
                                     textInputAction: TextInputAction.next,
                                     onEditingComplete: _scopeNode.nextFocus,
-                                    decoration: const InputDecoration(
-                                      label: Text("First Name"),
-                                      border: OutlineInputBorder(),
+                                    decoration: InputDecoration(
+                                      label: Text(AppLocalizations.of(context)!.formFieldFirstName),
+                                      border: const OutlineInputBorder(),
                                     ),
                                   ),
                                 ),
@@ -141,13 +136,13 @@ class _CreateAddressModalViewState extends State<CreateAddressModalView> {
                                 Flexible(
                                   child: TextFormField(
                                     controller: _lastNameController,
-                                    validator: _fieldValidator,
+                                    validator: nonEmptyStringValidator(context),
                                     keyboardType: TextInputType.name,
                                     textInputAction: TextInputAction.next,
                                     onEditingComplete: _scopeNode.nextFocus,
-                                    decoration: const InputDecoration(
-                                      label: Text("Last Name"),
-                                      border: OutlineInputBorder(),
+                                    decoration: InputDecoration(
+                                      label: Text(AppLocalizations.of(context)!.formFieldLastName),
+                                      border: const OutlineInputBorder(),
                                     ),
                                   ),
                                 ),
@@ -156,13 +151,13 @@ class _CreateAddressModalViewState extends State<CreateAddressModalView> {
                             const SizedBox(height: 16.0,),
                             TextFormField(
                               controller: _streetController,
-                              validator: _fieldValidator,
+                              validator: nonEmptyStringValidator(context),
                               keyboardType: TextInputType.streetAddress,
                               textInputAction: TextInputAction.next,
                               onEditingComplete: _scopeNode.nextFocus,
-                              decoration: const InputDecoration(
-                                label: Text("Street, Nr."),
-                                border: OutlineInputBorder(),
+                              decoration: InputDecoration(
+                                label: Text(AppLocalizations.of(context)!.formFieldAddress),
+                                border: const OutlineInputBorder(),
                               ),
                             ),
                             const SizedBox(height: 16.0,),
@@ -173,13 +168,13 @@ class _CreateAddressModalViewState extends State<CreateAddressModalView> {
                                   width: 72,
                                   child: TextFormField(
                                     controller: _postCodeController,
-                                    validator: _fieldValidator,
+                                    validator: nonEmptyStringValidator(context),
                                     keyboardType: TextInputType.number,
                                     textInputAction: TextInputAction.next,
                                     onEditingComplete: _scopeNode.nextFocus,
-                                    decoration: const InputDecoration(
-                                      label: Text("PLZ"),
-                                      border: OutlineInputBorder(),
+                                    decoration: InputDecoration(
+                                      label: Text(AppLocalizations.of(context)!.formFieldZipCode),
+                                      border: const OutlineInputBorder(),
                                     ),
                                   ),
                                 ),
@@ -187,13 +182,13 @@ class _CreateAddressModalViewState extends State<CreateAddressModalView> {
                                 Flexible(
                                   child: TextFormField(
                                     controller: _cityController,
-                                    validator: _fieldValidator,
+                                    validator: nonEmptyStringValidator(context),
                                     keyboardType: TextInputType.streetAddress,
                                     textInputAction: TextInputAction.done,
                                     onEditingComplete: _submitButtonPressed,
-                                    decoration: const InputDecoration(
-                                      label: Text("City"),
-                                      border: OutlineInputBorder(),
+                                    decoration: InputDecoration(
+                                      label: Text(AppLocalizations.of(context)!.formFieldCity),
+                                      border: const OutlineInputBorder(),
                                     ),
                                   ),
                                 ),
@@ -218,7 +213,7 @@ class _CreateAddressModalViewState extends State<CreateAddressModalView> {
                       minimumSize: const Size.fromHeight(40),
                     ),
                     onPressed: _submitButtonPressed,
-                    child: Text("Confirm".toUpperCase())
+                    child: Text(AppLocalizations.of(context)!.saveAddressButton.toUpperCase())
                 ),
               ),
             ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mailman/components/address_preview.dart';
 import 'package:mailman/components/message_preview.dart';
 import 'package:mailman/model/postcard.dart';
@@ -126,7 +127,7 @@ class MaterialPostcardBack extends StatelessWidget {
               border: Border.all(color: Theme.of(context).dividerColor)),
           child: Center(
             child: Text(
-              "Advertisement",
+              AppLocalizations.of(context)!.postcardAdvertisementPlaceholder,
               style: Theme.of(context).textTheme.caption,
             ),
           ),
@@ -150,7 +151,7 @@ class MaterialPostcardBack extends StatelessWidget {
                       messageImageUrl: postcard?.messageImageUrl,
                       messageImage: postcard?.messageImage,
                       compact: true,
-                      actionLabel: "Message",
+                      actionLabel: AppLocalizations.of(context)!.postcardMessagePlaceholder,
                     ),
                     const SizedBox(height: 8),
                     _buildAdPlaceholder(context),
@@ -166,14 +167,14 @@ class MaterialPostcardBack extends StatelessWidget {
                       AddressPreview(
                         address: postcard?.sender,
                         onTap: onEditSenderAddress,
-                        actionLabel: "Sender",
+                        actionLabel: AppLocalizations.of(context)!.postcardSenderAddressPlaceholder,
                         compact: true,
                       ),
                       const SizedBox(height: 8),
                       AddressPreview(
                         address: postcard?.recipient,
                         onTap: onEditRecipientAddress,
-                        actionLabel: "Recipient",
+                        actionLabel: AppLocalizations.of(context)!.postcardRecipientAddressPlaceholder,
                         compact: true,
                       ),
                     ],

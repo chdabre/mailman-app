@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mailman/bloc/address/bloc.dart';
 import 'package:mailman/components/postcard_preview.dart';
 import 'package:mailman/image_utils.dart';
@@ -13,7 +14,6 @@ import 'package:mailman/model/rich_message_data.dart';
 import 'package:mailman/repository/jobs_repository.dart';
 import 'package:mailman/repository/rest/api_client.dart';
 import 'package:mailman/routes/create_postcard/choose_address_modal.dart';
-import 'package:mailman/routes/create_postcard/edit_message_modal.dart';
 
 import 'edit_rich_message_modal.dart';
 
@@ -127,7 +127,7 @@ class _CreatePostcardRouteState extends State<CreatePostcardRoute> {
   void _pickSenderAddress(BuildContext context) async {
     var address = await showChooseAddressModal(context,
         selectedAddress: _postcard.sender,
-        titleText: "Sender Address",
+        titleText: AppLocalizations.of(context)!.senderAddressModalTitle,
     );
     _postcard = _postcard.copyWith(
       sender: address,
@@ -138,7 +138,7 @@ class _CreatePostcardRouteState extends State<CreatePostcardRoute> {
   void _pickRecipientAddress(BuildContext context) async {
     var address = await showChooseAddressModal(context,
         selectedAddress: _postcard.recipient,
-        titleText: "Recipient Address",
+        titleText: AppLocalizations.of(context)!.recipientAddressModalTitle,
     );
     _postcard = _postcard.copyWith(
       recipient: address,
@@ -173,7 +173,7 @@ class _CreatePostcardRouteState extends State<CreatePostcardRoute> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).backgroundColor,
         elevation: 0,
-        title: const Text("Create a Postcard"),
+        title: Text(AppLocalizations.of(context)!.createModalTitle),
         flexibleSpace: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: const [
@@ -223,7 +223,7 @@ class _CreatePostcardRouteState extends State<CreatePostcardRoute> {
                   minimumSize: const Size.fromHeight(48),
                   elevation: 0,
                 ),
-                child: Text("Submit".toUpperCase())
+                child: Text(AppLocalizations.of(context)!.submitPostcardButton.toUpperCase())
               ),
             ),
           ],

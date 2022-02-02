@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mailman/routes/preferences_modal.dart';
 
 class ShowPreferencesAction extends StatelessWidget {
@@ -29,7 +30,7 @@ class MailmanAppBar {
         mainAxisAlignment: MainAxisAlignment.end,
         children: const [ Divider(height: 1) ],
       ),
-      title: Text('mailman',
+      title: Text(AppLocalizations.of(context)!.appTitle.toLowerCase(),
         style: Theme.of(context).textTheme.headline4,
       ),
       actions: const [

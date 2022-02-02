@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mailman/bloc/jobs/bloc.dart';
 import 'package:mailman/components/app_bar.dart';
 import 'package:mailman/components/postcard_preview.dart';
@@ -53,7 +53,7 @@ class _HomeRouteState extends State<HomeRoute> {
               if (created != null) _jobsBloc.add(RefreshJobsList());
             },
             backgroundColor: Theme.of(context).primaryColor,
-            label: const Text("CREATE"),
+            label: Text(AppLocalizations.of(context)!.createButton.toUpperCase()),
             icon: const Icon(Icons.add),
           ),
           body: SafeArea(
@@ -143,13 +143,13 @@ class PostcardJobsListEmptyPlaceholder extends StatelessWidget {
               image: AssetImage('assets/image/list_empty_placeholder.png')
             ),
             const SizedBox(height: 16),
-            Text("Nothing here!",
+            Text(AppLocalizations.of(context)!.jobsListEmptyTitle,
               style: Theme.of(context).textTheme.headline6
             ),
             const SizedBox(height: 8),
-            const SizedBox(
+            SizedBox(
               width: 200,
-              child: Text("Create your first Postcard using the button below.",
+              child: Text(AppLocalizations.of(context)!.jobsListEmptyDescription,
                 textAlign: TextAlign.center,
               )
             ),
@@ -169,13 +169,20 @@ class PostcardJobsListItem extends StatelessWidget {
   final Postcard postcard;
   final bool isFirst;
 
-  String _getStatusString() {
+  String _getStatusString(context) {
     DateTime now = DateTime.now();
     DateTime today = DateTime(now.year, now.month, now.day);
 
-    if (postcard.status == 'SENT') return "Sent on ${postcard.timeSent != null ? DateFormat('MMM dd, kk:mm').format(postcard.timeSent!) : ""}";
-    if (postcard.sendOn != null && postcard.sendOn!.isAfter(today)) return DateFormat('MMM dd, kk:mm').format(postcard.sendOn!);
-    return "Waiting";
+    if (postcard.status == 'SENT') {
+      if (postcard.timeSent != null) {
+        return AppLocalizations.of(context)!.jobStatusSentOn(postcard.timeSent!);
+      }
+      return AppLocalizations.of(context)!.jobStatusSent;
+    }
+    if (postcard.sendOn != null && postcard.sendOn!.isAfter(today)) {
+      return AppLocalizations.of(context)!.jobStatusScheduledFor(postcard.sendOn!);
+    }
+    return AppLocalizations.of(context)!.jobStatusWaiting;
   }
 
   Color _getStatusColor() {
@@ -197,7 +204,7 @@ class PostcardJobsListItem extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: CircleAvatar(backgroundColor: _getStatusColor(), radius: 6,),
               ),
-              Text(_getStatusString().toUpperCase(),
+              Text(_getStatusString(context).toUpperCase(),
                 style: Theme.of(context).textTheme.overline,
               ),
               const Spacer(),
@@ -205,8 +212,8 @@ class PostcardJobsListItem extends StatelessWidget {
                 visualDensity: VisualDensity.compact,
                 splashRadius: 20,
                 onPressed: () async {
-                  bool refresh = await showQuickActionsModal(context, postcard);
-                  if (refresh) {
+                  bool? refresh = await showQuickActionsModal(context, postcard);
+                  if (refresh != null && refresh) {
                     getIt<JobsBloc>().add(RefreshJobsList());
                   }
                 },

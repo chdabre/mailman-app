@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mailman/routes/create_postcard/create_postcard.dart';
 import 'package:mailman/routes/environment_changer.dart';
@@ -42,6 +43,8 @@ class MailmanApplication extends StatelessWidget {
           title: 'Mailman',
           debugShowCheckedModeBanner: false,
           theme: mailmanTheme,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           initialRoute: initialRouteName,
           routes: {
             HomeRoute.routeName: (context) => const HomeRoute(),

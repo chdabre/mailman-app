@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flip_card/flip_card_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mailman/components/icon_and_text_label.dart';
 import 'package:mailman/components/material_postcard.dart';
 import 'package:mailman/model/postcard.dart';
@@ -53,9 +54,9 @@ class PostcardPreviewState extends State<PostcardPreview> {
       return MaterialPostcard(
           onTap: widget.onPickFrontImage,
           loading: widget.loading,
-          child: const IconAndTextLabel(
+          child: IconAndTextLabel(
             icon: Icons.image,
-            actionLabel: "Choose Image",
+            actionLabel: AppLocalizations.of(context)!.postcardImagePlaceholder,
             fontSize: 12,
           ));
     }

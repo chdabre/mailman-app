@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Alert extends StatelessWidget {
   const Alert({
@@ -22,7 +23,7 @@ class Alert extends StatelessWidget {
         ),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Text("Error: $_errorMessage"),
+          child: Text(AppLocalizations.of(context)!.errorWithMessage(_errorMessage ?? "")),
         ),
       ),
     );

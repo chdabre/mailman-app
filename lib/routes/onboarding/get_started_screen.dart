@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class GetStartedScreen extends StatefulWidget {
   final void Function() onLoginPressed;
@@ -28,30 +29,30 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
-                    child: Text("mailman",
+                    child: Text(AppLocalizations.of(context)!.appTitle,
                       style: Theme.of(context).textTheme.headline4!.copyWith(
                         fontSize: 32,
                       ),
                     ),
                   ),
                   const SizedBox(height: 16,),
-                  Text("Mailman connects with your Postcard Creator account and sends free postcards for you, whenever they are available.",
+                  Text(AppLocalizations.of(context)!.appIntroDescription,
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                   const SizedBox(height: 24,),
-                  const SellingPoint(
-                    title: "Queue up postcards.",
-                    subtitle: "Mailman automatically sends your postcards one by one after each 24-hour waiting period.",
+                  SellingPoint(
+                    title: AppLocalizations.of(context)!.appIntroQueueUpTitle,
+                    subtitle: AppLocalizations.of(context)!.appIntroQueueUpDescription,
                     icon: Icons.all_inbox,
                   ),
-                  const SellingPoint(
-                    title: "Schedule your delivery.",
-                    subtitle: "Pick a Date and we’ll send your postcard on the right day.",
+                  SellingPoint(
+                    title: AppLocalizations.of(context)!.appIntroScheduleDeliveryTitle,
+                    subtitle: AppLocalizations.of(context)!.appIntroScheduleDeliveryDescription,
                     icon: Icons.schedule,
                   ),
-                  const SellingPoint(
-                    title: "Create postcards fast.",
-                    subtitle: "Save your most-used addresses and crop your images in seconds.",
+                  SellingPoint(
+                    title: AppLocalizations.of(context)!.appIntroCreateTitle,
+                    subtitle: AppLocalizations.of(context)!.appIntroCreateDescription,
                     icon: Icons.bolt,
                   ),
                 ],
@@ -64,7 +65,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                   minimumSize: const Size.fromHeight(48),
                   elevation: 0,
               ),
-              child: Text("Sign up".toUpperCase())
+              child: Text(AppLocalizations.of(context)!.appIntroSignUpCTA.toUpperCase())
           ),
           const SizedBox(height: 16,),
           OutlinedButton(
@@ -72,7 +73,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
               style: OutlinedButton.styleFrom(
                 minimumSize: const Size.fromHeight(48),
               ),
-              child: Text("Log In".toUpperCase(),
+              child: Text(AppLocalizations.of(context)!.appIntroLogInCTA.toUpperCase(),
                 style: Theme.of(context).textTheme.button?.copyWith(
                     color: Theme.of(context).colorScheme.onPrimary
                 ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mailman/bloc/address/address_bloc.dart';
 import 'package:mailman/bloc/address/address_event.dart';
 import 'package:mailman/bloc/auth/bloc.dart';
@@ -64,7 +65,7 @@ class PreferencesUserHeader extends StatelessWidget {
                 const Divider(),
                 ListTile(
                   leading: const Icon(Icons.logout),
-                  title: const Text("Logout"),
+                  title: Text(AppLocalizations.of(context)!.authActionLogout),
                   onTap: () {
                     Navigator.pop(context);
                     authBloc.add(Logout());
@@ -81,7 +82,7 @@ class PreferencesUserHeader extends StatelessWidget {
                 const Divider(),
                 ListTile(
                   leading: const Icon(Icons.login),
-                  title: const Text("Login"),
+                  title: Text(AppLocalizations.of(context)!.authActionLogin),
                   onTap: () {
                     var signUpModal = SignUpModal.instance;
                     signUpModal.startSignUp(context: context);
@@ -138,7 +139,7 @@ class _PreferencesViewState extends State<PreferencesView> {
         const PreferencesUserHeader(),
         AboutListTile(
           icon: const Icon(Icons.info),
-          applicationLegalese: "Created by Dario Breitenstein.\nPowered by open source software.\nThis App is in no way affiliated with Post CH AG or Postcard Creator. Use at your own discretion.",
+          applicationLegalese: AppLocalizations.of(context)!.applicationLegalese,
           applicationIcon: ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: const Image(
@@ -163,15 +164,13 @@ class PreferencesFooter extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // Text("1.0",
-        //   style: Theme.of(context).textTheme.caption,
-        // ),
         InkWell(
           onTap: () => Navigator.of(context).pushNamed(EnvironmentChangerRoute.routeName),
-          child: Text("Made by Dario Breitenstein",
+          child: Text(AppLocalizations.of(context)!.madeByLabel,
             style: Theme.of(context).textTheme.caption,
           ),
         ),
+        const SizedBox(height: 16.0),
       ],
     );
   }

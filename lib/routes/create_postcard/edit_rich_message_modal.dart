@@ -1,11 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mailman/model/rich_message_data.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:mailman/model/rich_message_data.dart';
 import 'package:mailman/image_utils.dart';
 
 class RichMessageEditResult {
@@ -24,7 +24,7 @@ Future<dynamic> showEditRichMessageModal(BuildContext context, RichMessageData? 
       //enableDrag: false,
       builder: (context) => Scaffold(
         appBar: AppBar(
-          title: const Text("Edit Message"),
+          title: Text(AppLocalizations.of(context)!.editMessageTitle),
           backgroundColor: Theme.of(context).backgroundColor,
           elevation: 0,
           flexibleSpace: Column(
@@ -106,7 +106,7 @@ class _EditMessageModalViewState extends State<EditMessageModalView> {
                     strokeWidth: 2,
                     color: Theme.of(context).disabledColor,
                   ),
-                ) : Text("Confirm".toUpperCase())
+                ) : Text(AppLocalizations.of(context)!.saveMessageButton.toUpperCase())
             ),
           ],
         ),
@@ -157,10 +157,7 @@ class RichMessageEditorState extends State<RichMessageEditor> {
         data: const MediaQueryData(),
         child: Localizations(
           locale: const Locale('en'),
-          delegates: const [
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-          ],
+          delegates: AppLocalizations.localizationsDelegates,
           child: Material(
             child: child,
             color: Colors.white,
@@ -221,7 +218,7 @@ class RichMessageEditorState extends State<RichMessageEditor> {
                     color: Colors.transparent,
                   )) : null,
                   border: const OutlineInputBorder(),
-                  label: !isPreview ? Center(child: Text("Tap to Edit Text",
+                  label: !isPreview ? Center(child: Text(AppLocalizations.of(context)!.tapToEdit,
                     style: Theme.of(context).textTheme.bodyText2,
                   ),) : null,
                   floatingLabelBehavior: FloatingLabelBehavior.never,

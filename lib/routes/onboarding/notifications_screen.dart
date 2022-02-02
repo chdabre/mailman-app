@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mailman/services/cloud_notification_service.dart';
 
 final GetIt getIt = GetIt.instance;
@@ -45,14 +46,14 @@ class _PushNotificationsScreenState extends State<PushNotificationsScreen> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
-                    child: Text("Receive Push Notifications",
+                    child: Text(AppLocalizations.of(context)!.notificationsTitle,
                       style: Theme.of(context).textTheme.headline5!.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
                   const SizedBox(height: 16,),
-                  Text("We can send you push notifications about the status of your postcards.",
+                  Text(AppLocalizations.of(context)!.notificationsDescription,
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                   const SizedBox(height: 24,),
@@ -66,7 +67,7 @@ class _PushNotificationsScreenState extends State<PushNotificationsScreen> {
                 minimumSize: const Size.fromHeight(48),
                 elevation: 0,
               ),
-              child: Text("Done".toUpperCase(),
+              child: Text(AppLocalizations.of(context)!.notificationsDoneButton.toUpperCase(),
                 style: Theme.of(context).textTheme.button!.copyWith(
                   color: Theme.of(context).colorScheme.onSurface,
                 ),

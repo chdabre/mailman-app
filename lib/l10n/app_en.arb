@@ -1,0 +1,90 @@
+{
+  "@@locale": "en",
+  "appTitle": "mailman",
+  "appIntroDescription": "Mailman connects with your Postcard Creator account and sends free postcards for you, whenever they are available.",
+  "appIntroQueueUpTitle": "Queue up postcards.",
+  "appIntroQueueUpDescription": "Mailman automatically sends your postcards one by one after each 24-hour waiting period.",
+  "appIntroScheduleDeliveryTitle": "Schedule your delivery.",
+  "appIntroScheduleDeliveryDescription": "Pick a Date and we’ll send your postcard on the right day.",
+  "appIntroCreateTitle": "Create postcards fast.",
+  "appIntroCreateDescription": "Save your most-used addresses and crop your images in seconds.",
+  "appIntroSignUpCTA": "Sign up",
+  "appIntroLogInCTA": "Log in",
+  "loginCreateAccountTitle": "Create a Mailman account",
+  "loginLoginTitle": "Log in to your Mailman account",
+  "loginDescription": "You can authorize your Postcard Creator Account in the next step.",
+  "loginCreateAccountSubmitButton": "Create Account",
+  "loginLoginSubmitButton": "Log in",
+  "loginSwitchToLoginButton": "I already have an account",
+  "loginSwitchToSignUpButton": "Create an account",
+  "credentialsTitle": "Connect your Postcard Creator Account",
+  "credentialsDescription": "Mailman connects with your Postcard Creator account. Click the button below and sign in securely on post.ch.",
+  "credentialsAuthorizeButton": "Connect my Account",
+  "notificationsTitle": "Receive Push Notifications",
+  "notificationsDescription": "We can send you push notifications about the status of your postcards.",
+  "notificationsDoneButton": "Done",
+  "createButton": "Create",
+  "jobsListEmptyTitle": "Nothing here!",
+  "jobsListEmptyDescription": "Create your first Postcard using the button below.",
+  "jobStatusSent": "Sent",
+  "jobStatusWaiting" : "Waiting",
+  "jobStatusSentOn": "Sent on {date}",
+  "@jobStatusSentOn": {
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "isCustomDateFormat": "true",
+        "format": "dd. MMM kk:mm"
+      }
+    }
+  },
+  "jobStatusScheduledFor": "{date}",
+  "@jobStatusScheduledFor": {
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "isCustomDateFormat": "true",
+        "format": "dd. MMM"
+      }
+    }
+  },
+  "jobActionDelete": "Delete",
+  "authActionLogout": "Log out",
+  "authActionLogin": "Log in",
+  "createModalTitle": "Create a Postcard",
+  "submitPostcardButton": "Submit",
+  "senderAddressModalTitle": "Sender Address",
+  "recipientAddressModalTitle": "Recipient Address",
+  "editMessageTitle": "Edit Message",
+  "saveMessageButton": "Save",
+  "tapToEdit": "Tap to edit text",
+  "createAddressTitle": "Create Address",
+  "saveAddressButton": "Confirm",
+  "chooseAddressTitle": "Choose Address",
+  "createAddressButton": "Add new Address",
+  "confirmAddressButton": "Confirm",
+  "postcardAdvertisementPlaceholder": "Advertisement",
+  "postcardMessagePlaceholder": "Message",
+  "postcardSenderAddressPlaceholder": "Sender",
+  "postcardRecipientAddressPlaceholder": "Recipient",
+  "postcardImagePlaceholder": "Choose Image",
+  "errorWithMessage": "Error: {error}",
+  "@errorWithMessage": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "validationEmailInvalid": "Enter a valid email address",
+  "validationNonEmptyString": "Please enter some text",
+  "formFieldEmail": "Email",
+  "formFieldPassword": "Password",
+  "formFieldFirstName": "First Name",
+  "formFieldLastName": "Last Name",
+  "formFieldAddress": "Street, Nr.",
+  "formFieldCity": "City",
+  "formFieldZipCode": "PLZ",
+  "applicationLegalese": "Created by Dario Breitenstein.\nPowered by open source software.\nThis App is in no way affiliated with Post CH AG or Postcard Creator. Use at your own discretion.",
+  "madeByLabel": "Made by Dario Breitenstein"
+}

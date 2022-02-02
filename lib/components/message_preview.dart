@@ -36,7 +36,7 @@ class MessagePreview extends StatelessWidget {
 
   Widget _buildTextPreview(BuildContext context) {
     if (message == null && _getMessageImage() == null) {
-      return const IconAndTextLabel(icon: Icons.edit, actionLabel: "Message");
+      return IconAndTextLabel(icon: Icons.edit, actionLabel: actionLabel);
     }
     if (message != null && _getMessageImage() == null) {
       return SingleChildScrollView(

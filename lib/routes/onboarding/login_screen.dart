@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mailman/bloc/auth/bloc.dart';
 import 'package:mailman/components/alert.dart';
+import 'package:mailman/utils/validation.dart';
 
 final GetIt getIt = GetIt.instance;
 
@@ -56,17 +58,17 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
           switchMode: _switchMode,
           onAuthCompleted: widget.onAuthCompleted,
           submitButtonPressed: _signupAction,
-          title: "Create a Mailman account",
-          submitButtonText: "Create Account",
-          switchModeText: "I already have an account",
+          title: AppLocalizations.of(context)!.loginCreateAccountTitle,
+          submitButtonText: AppLocalizations.of(context)!.loginCreateAccountSubmitButton,
+          switchModeText: AppLocalizations.of(context)!.loginSwitchToLoginButton,
         ) :
         UsernamePasswordForm(
           switchMode: _switchMode,
           onAuthCompleted: widget.onAuthCompleted,
           submitButtonPressed: _loginAction,
-          title: "Log in to your Mailman account",
-          submitButtonText: "Log in",
-          switchModeText: "Create an account",
+          title: AppLocalizations.of(context)!.loginLoginTitle,
+          submitButtonText:AppLocalizations.of(context)!.loginLoginSubmitButton,
+          switchModeText: AppLocalizations.of(context)!.loginSwitchToSignUpButton,
         )
     );
   }
@@ -139,19 +141,6 @@ class _UsernamePasswordFormState extends State<UsernamePasswordForm> {
     setState(() {});
   }
 
-  String? validateEmail(String? value) {
-    String pattern =
-        r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]"
-        r"{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]"
-        r"{0,253}[a-zA-Z0-9])?)*$";
-    RegExp regex = RegExp(pattern);
-    if (value == null || value.isEmpty || !regex.hasMatch(value)) {
-      return 'Enter a valid email address';
-    } else {
-      return null;
-    }
-  }
-
   @override
   void initState() {
     _usernameController = TextEditingController();
@@ -181,7 +170,7 @@ class _UsernamePasswordFormState extends State<UsernamePasswordForm> {
                           fontWeight: FontWeight.w600,
                         )),
                       ),
-                      const Text("You can authorize your Postcard Creator Account in the next step."),
+                      Text(AppLocalizations.of(context)!.loginDescription),
                       const SizedBox(height: 24.0,),
                       FocusScope(
                         node: _scopeNode,
@@ -194,31 +183,26 @@ class _UsernamePasswordFormState extends State<UsernamePasswordForm> {
                             children: [
                               TextFormField(
                                 controller: _usernameController,
-                                validator: validateEmail,
+                                validator: emailValidator(context),
                                 autofocus: true,
                                 keyboardType: TextInputType.emailAddress,
                                 textInputAction: TextInputAction.next,
                                 onEditingComplete: _scopeNode.nextFocus,
-                                decoration: const InputDecoration(
-                                    label: Text("Email"),
-                                    border: OutlineInputBorder()
+                                decoration: InputDecoration(
+                                    label: Text(AppLocalizations.of(context)!.formFieldEmail),
+                                    border: const OutlineInputBorder()
                                 ),
                               ),
                               const SizedBox(height: 16.0,),
                               TextFormField(
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please enter some text';
-                                  }
-                                  return null;
-                                },
+                                validator: nonEmptyStringValidator(context),
                                 controller: _passwordController,
                                 keyboardType: TextInputType.visiblePassword,
                                 textInputAction: TextInputAction.done,
                                 onEditingComplete: _submitButtonPressed,
-                                decoration: const InputDecoration(
-                                  label: Text("Password"),
-                                  border: OutlineInputBorder(),
+                                decoration: InputDecoration(
+                                  label: Text(AppLocalizations.of(context)!.formFieldPassword),
+                                  border: const OutlineInputBorder(),
                                 ),
                                 obscureText: true,
                               ),
