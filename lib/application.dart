@@ -6,6 +6,7 @@ import 'package:mailman/routes/create_postcard/create_postcard.dart';
 import 'package:mailman/routes/environment_changer.dart';
 import 'package:mailman/routes/home/home.dart';
 import 'package:mailman/theme/mailman_theme.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'bloc/address/bloc.dart';
 import 'bloc/auth/bloc.dart';
@@ -43,7 +44,10 @@ class MailmanApplication extends StatelessWidget {
           title: 'Mailman',
           debugShowCheckedModeBanner: false,
           theme: mailmanTheme,
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          localizationsDelegates: const [
+            ...AppLocalizations.localizationsDelegates,
+            RefreshLocalizations.delegate
+          ],
           supportedLocales: AppLocalizations.supportedLocales,
           initialRoute: initialRouteName,
           routes: {
