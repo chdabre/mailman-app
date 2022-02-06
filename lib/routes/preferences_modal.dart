@@ -7,6 +7,7 @@ import 'package:mailman/bloc/address/address_event.dart';
 import 'package:mailman/bloc/auth/bloc.dart';
 import 'package:mailman/bloc/jobs/bloc.dart';
 import 'package:mailman/bloc/user_data/bloc.dart';
+import 'package:mailman/components/terms_button.dart';
 import 'package:mailman/model/user.dart';
 import 'package:mailman/routes/environment_changer.dart';
 import 'package:mailman/routes/onboarding/sign_up_modal.dart';
@@ -35,6 +36,38 @@ class PreferencesModal {
             ),
           ),
         )
+    );
+  }
+}
+
+class PreferencesView extends StatefulWidget {
+  const PreferencesView({Key? key}) : super(key: key);
+
+  @override
+  _PreferencesViewState createState() => _PreferencesViewState();
+}
+
+class _PreferencesViewState extends State<PreferencesView> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const PreferencesUserHeader(),
+        AboutListTile(
+          icon: const Icon(Icons.info),
+          applicationLegalese: AppLocalizations.of(context)!.applicationLegalese,
+          applicationIcon: ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: const Image(
+              image: AssetImage("assets/image/app-icon.png"),
+              width: 32,
+            ),
+          ),
+        ),
+        const TermsListTile(),
+        const Spacer(),
+        const PreferencesFooter()
+      ],
     );
   }
 }
@@ -119,38 +152,6 @@ class UserListTile extends StatelessWidget {
         ),
       ),
       contentPadding: const EdgeInsets.only(top: 24, left: 16, right: 16, bottom: 8),
-    );
-  }
-}
-
-
-class PreferencesView extends StatefulWidget {
-  const PreferencesView({Key? key}) : super(key: key);
-
-  @override
-  _PreferencesViewState createState() => _PreferencesViewState();
-}
-
-class _PreferencesViewState extends State<PreferencesView> {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const PreferencesUserHeader(),
-        AboutListTile(
-          icon: const Icon(Icons.info),
-          applicationLegalese: AppLocalizations.of(context)!.applicationLegalese,
-          applicationIcon: ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: const Image(
-                image: AssetImage("assets/image/app-icon.png"),
-                width: 32,
-            ),
-          ),
-        ),
-        const Spacer(),
-        const PreferencesFooter()
-      ],
     );
   }
 }

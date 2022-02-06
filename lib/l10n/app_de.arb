@@ -13,6 +13,7 @@
   "loginCreateAccountTitle": "Mailman-Account erstellen",
   "loginLoginTitle": "Bei Mailman anmelden",
   "loginDescription": "Auf deinem Mailman-Account werden deine wartenden Postkarten gespeichert. \nSpäter kannst du dein Postcard Creator-Account verbinden, um Postkarten zu versenden.",
+  "loginTermsLabel": "Mit deiner Anmeldung stimmst du den Bedingungen von Mailman zu.",
   "loginCreateAccountSubmitButton": "Account erstellen",
   "loginLoginSubmitButton": "Anmelden",
   "loginSwitchToLoginButton": "Ich habe bereits einen Account",
@@ -62,6 +63,7 @@
   "formFieldCity": "Ort",
   "formFieldZipCode": "PLZ",
   "termsUrl": "https://mailman.imakethings.ch/privacy_policy/",
+  "termsLabel": "Nutzungsbedingungen & Privatsphäre",
   "applicationLegalese": "Ausgedacht und umgesetzt von Dario Breitenstein.\nErmöglicht dank Open-Source-Software.\nDiese App steht in keiner Weise in Verbindung mit Post CH AG oder Postcard Creator. Verwendung in eigener Verantwortung.",
   "madeByLabel": "Made by Dario Breitenstein"
 }

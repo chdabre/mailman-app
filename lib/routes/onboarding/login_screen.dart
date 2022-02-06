@@ -224,7 +224,7 @@ class _UsernamePasswordFormState extends State<UsernamePasswordForm> {
                                 Expanded(
                                   child: Padding(
                                     padding: const EdgeInsets.only(top: 16.0, bottom: 16.0, right: 16.0),
-                                    child: Text("Mit deiner Anmeldung stimmst du den Bedingungen von Mailman zu.", style: Theme.of(context).textTheme.caption,),
+                                    child: Text(AppLocalizations.of(context)!.loginTermsLabel, style: Theme.of(context).textTheme.caption,),
                                   ),
                                 ),
                                 const VerticalDivider(width: 0, indent: 4, endIndent: 4,),
