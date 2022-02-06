@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mailman/bloc/address/bloc.dart';
 import 'package:mailman/components/postcard_preview.dart';
+import 'package:mailman/components/terms_button.dart';
 import 'package:mailman/image_utils.dart';
 import 'package:mailman/model/postcard.dart';
 import 'package:mailman/model/rich_message_data.dart';
@@ -33,9 +34,9 @@ class CreatePostcardRoute extends StatefulWidget {
 class _CreatePostcardRouteState extends State<CreatePostcardRoute> {
   late Postcard _postcard;
 
-  bool _postcardLoading = false;
   final GlobalKey<PostcardPreviewState> _preview = GlobalKey();
-
+  bool _didAcceptTerms = false;
+  bool _postcardLoading = false;
   bool _loading = false;
 
   @override
@@ -146,6 +147,10 @@ class _CreatePostcardRouteState extends State<CreatePostcardRoute> {
     setState(() {});
   }
 
+  bool _valid() {
+    return _postcard.isValid() && _didAcceptTerms && !_loading;
+  }
+
   void _submit(BuildContext context) async {
     _loading = true;
     setState(() {});
@@ -213,12 +218,34 @@ class _CreatePostcardRouteState extends State<CreatePostcardRoute> {
                 ),
               ),
             ),
+            IntrinsicHeight(
+              child: Row(
+                children: [
+                  Expanded(
+                    child: CheckboxListTile(
+                      title: Text(AppLocalizations.of(context)!.createTermsLabel,
+                          style: Theme.of(context).textTheme.caption,
+                      ),
+                      activeColor: Theme.of(context).primaryColor,
+                      controlAffinity: ListTileControlAffinity.leading,
+                      value: _didAcceptTerms,
+                      onChanged: (value) {
+                        _didAcceptTerms = value ?? false;
+                        setState(() {});
+                      }
+                    ),
+                  ),
+                  const VerticalDivider(width: 0, indent: 4, endIndent: 4,),
+                  const TermsButton()
+                ],
+              ),
+            ),
             const Divider(height: 1,),
             if (_loading) const LinearProgressIndicator(),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: ElevatedButton(
-                onPressed: _postcard.isValid() && !_loading ? () => _submit(context) : null,
+                onPressed: _valid() ? () => _submit(context) : null,
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size.fromHeight(48),
                   elevation: 0,

@@ -53,6 +53,7 @@
   "authActionLogin": "Log in",
   "createModalTitle": "Create a Postcard",
   "submitPostcardButton": "Submit",
+  "createTermsLabel": "I accept the terms of Mailman and Postcard Creator.",
   "senderAddressModalTitle": "Sender Address",
   "recipientAddressModalTitle": "Recipient Address",
   "editMessageTitle": "Edit Message",
@@ -85,6 +86,7 @@
   "formFieldAddress": "Street, Nr.",
   "formFieldCity": "City",
   "formFieldZipCode": "PLZ",
+  "termsUrl": "https://mailman.imakethings.ch/privacy_policy/",
   "applicationLegalese": "Created by Dario Breitenstein.\nPowered by open source software.\nThis App is in no way affiliated with Post CH AG or Postcard Creator. Use at your own discretion.",
   "madeByLabel": "Made by Dario Breitenstein"
 }

@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mailman/bloc/auth/bloc.dart';
 import 'package:mailman/components/alert.dart';
+import 'package:mailman/components/terms_button.dart';
 import 'package:mailman/utils/validation.dart';
 
 final GetIt getIt = GetIt.instance;
@@ -217,6 +218,20 @@ class _UsernamePasswordFormState extends State<UsernamePasswordForm> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
+                          IntrinsicHeight(
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(top: 16.0, bottom: 16.0, right: 16.0),
+                                    child: Text("Mit deiner Anmeldung stimmst du den Bedingungen von Mailman zu.", style: Theme.of(context).textTheme.caption,),
+                                  ),
+                                ),
+                                const VerticalDivider(width: 0, indent: 4, endIndent: 4,),
+                                const TermsButton()
+                              ],
+                            ),
+                          ),
                           ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 minimumSize: const Size.fromHeight(40),
